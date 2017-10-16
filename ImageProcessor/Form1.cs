@@ -1,71 +1,136 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 
 namespace ImageProcessor {
     public partial class Form1 : Form {
 
-        //string dirTestFaceBmp = Directory.GetCurrentDirectory() +  @"\data\TestFaceBmp\";
-        //string dirTestNotFaceBmp = Directory.GetCurrentDirectory() + @"\data\TestNotFaceBmp\";
-        string dirTrainFaceBmp = Directory.GetCurrentDirectory() + @"\data\TrainFaceBmp\";
-        string dirTrainNotFaceBmp = Directory.GetCurrentDirectory() + @"\data\TrainNotFaceBmp\";
-        string dirTrainNotFaceBmpOld = Directory.GetCurrentDirectory() + @"\data\TrainNotFaceBmpOld\";
+        internal class ImageOperator {
 
-        //string prefix = "cmu_";
+            public ImageOperator() {
+                TempX = new int[3, 3];
+                TempY = new int[3, 3];
+            }
 
-        //int testFace = 471;
+            public int[,] OperatorX { get; set; }
+            public int[,] OperatorY { get; set; }
+            public string Name { get; set; }
+
+            public int[,] TempX { get; set; }
+            public int[,] TempY { get; set; }
+
+            double x, y = 0;
+            public double mathOperator = 0;
+
+            public double Apply(int xx, int yy, Bitmap bmp, bool show, TextBox tb) {
+                for (int y = 0; y < 3; y++) {
+                    for (int x = 0; x < 3; x++) {
+                        Color c = bmp.GetPixel(x + xx, y + yy);
+                        TempX[x, y] = c.R;
+                        TempY[x, y] = c.R;
+                    }
+                }
+
+                if (show) {
+                    tb.AppendText(ThreebythreeToString(TempX, "tempX"));
+                    tb.AppendText(ThreebythreeToString(TempY, "tempY"));
+
+                    tb.AppendText(ThreebythreeToString(OperatorX, Name));
+                    tb.AppendText(ThreebythreeToString(OperatorY, Name));
+                }
+                ThreeBythreeMultiply(TempX, OperatorX);
+                ThreeBythreeMultiply(TempY, OperatorY);
+
+
+                x = ThreeBythreeSum(TempX);
+                y = ThreeBythreeSum(TempY);
+                mathOperator = Math.Abs(x) + Math.Abs(y);
+                if (show) {
+                    tb.AppendText(ThreebythreeToString(TempX, "tempX"));
+                    tb.AppendText(ThreebythreeToString(TempY, "tempY"));
+                    tb.AppendText("sX=" + x.ToString() + " " + "sY=" + x.ToString() + " operator=" + mathOperator.ToString());
+                }
+                return mathOperator;
+            }
+
+            /// <summary>
+            /// multiply (not a matrix multiply) two 3x3 matrixes
+            /// put result back in a
+            /// </summary>
+            /// <param name="a"></param>
+            /// <param name="b"></param>
+            private void ThreeBythreeMultiply(int[,] a, int[,] b) {
+                for (int y = 0; y < 3; y++) {
+                    for (int x = 0; x < 3; x++) {
+                        a[x, y] = a[x, y] * b[x, y];
+                    }
+                }
+            }
+
+            private int ThreeBythreeSum(int[,] a) {
+                int sum = 0;
+                for (int y = 0; y < 3; y++) {
+                    for (int x = 0; x < 3; x++) {
+                        sum = sum + a[x, y];
+                    }
+                }
+                return sum;
+            }
+
+            private string ThreebythreeToString(int[,] a, string heading) {
+                string t = "";
+                if (heading != "") t = t + heading + "\r\n";
+                for (int y = 0; y < 3; y++) {
+                    t = t + a[0, y].ToString() + " " + a[1, y].ToString() + " " + a[2, y].ToString() + "\r\n";
+                }
+                return t;
+            }
+        }
+
+        #region Member variables
+        private readonly int[] gaps = new int[7] { 0, 3, 6, 8, 10, 13, 16 };
+        private string dirTestFaceBmp = @"C:\Temp\IPP\FaceData\TestFaceBmp\";
+        private string dirTestNotFaceBmp = @"C:\Temp\IPP\FaceData\TestNotFaceBmp\";
+        private string dirTrainFaceBmp = @"C:\Temp\IPP\FaceData\TrainFaceBmp\";
+        private string dirTrainNotFaceBmp = @"C:\Temp\IPP\FaceData\TrainNotFaceBmp\";
+        private string dirTrainNotFaceBmpOld = @"C:\Temp\IPP\FaceData\TrainNotFaceBmpOld\";
+
+        // string prefix = "cmu_";
+        // int testFace = 471;
         // int testNotFace = 23572;
         // int trainFace = 2429;
         // int trainNotFace = 4547;
 
         Bitmap bmp = null;
 
-        public int[,] sobelX = new int[3, 3] { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
-        public int[,] sobelY = new int[3, 3] { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
-
-        public int[,] kirschX = new int[3, 3] { { -5, 5, 3 }, { -5, 0, 3 }, { 3, 3, 3 } };
-        public int[,] kirschY = new int[3, 3] { { -5, -5, 3 }, { -5, 0, 3 }, { 3, 3, 3 } };
-
-        public int[,] operatorX;
-        public int[,] operatorY;
-        public string operatorXName;
-        public string operatorYName;
-
-        public int[,] sXtemp = new int[3, 3];
-        public int[,] sYtemp = new int[3, 3];
-
-        double sX = 0;
-        double sY = 0;
-        double mathOperator = 0;
-
-        int[] gaps = new int[7] { 0, 3, 6, 8, 10, 13, 16 };
+        // https://homepages.inf.ed.ac.uk/rbf/HIPR2/canny.htm
+        private double[,,] selectedOperator = ConvolutionUtils.Matrix.Sobel3x3x8;
+        #endregion
 
         public Form1() {
             InitializeComponent();
+
+            //// initialise sobel operator
+            //sobelOperator = new ImageOperator {
+            //    OperatorX = new int[3, 3] { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } },
+            //    OperatorY = new int[3, 3] { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } },
+            //    Name = "sobel"
+            //};
+
+            //// initialise kirsch operator
+            //kirschOperator = new ImageOperator {
+            //    OperatorX = new int[3, 3] { { -5, 5, 3 }, { -5, 0, 3 }, { 3, 3, 3 } },
+            //    OperatorY = new int[3, 3] { { -5, -5, 3 }, { -5, 0, 3 }, { 3, 3, 3 } },
+            //    Name = "kirsch"
+            //};
         }
 
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-
-        //}
-
-        private void button1_Click_1(object sender, EventArgs e) {
-            Close();
-        }
-
-        private void button2_Click(object sender, EventArgs e) {
+        #region Debug Button Clicks
+        private void DisplayAsRawRGBButton_Click(object sender, EventArgs e) {
             // test 1
             bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
-
-            pictureBox1.Image = bmp;
-
+            PreviewPictureBox.Image = bmp;
             textBox1.Clear();
 
             string s;
@@ -81,18 +146,37 @@ namespace ImageProcessor {
 
         }
 
-        public void copyFile(string fromFile, string toFile, int i) {
-            //textBox1.Text = textBox1.Text + "from >>" + fromFile + "\r\n";
-            //textBox1.Text = textBox1.Text + "to   >>" + toFile + "\r\n\r\n";            
-            string m1 = "from >>" + fromFile + "\r\n";
-            string m2 = "to   >>" + toFile + "\r\n\r\n";
-            textBox1.AppendText(m1);
-            textBox1.AppendText(m2);
+        private void PreviewOperatorButton_Click(object sender, EventArgs e) {
+            // test 2
+            bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
 
-            //File.Copy(fromFile, toFile, true); // - basically commented out as a saftey catch
+            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, 1.0 / 4.0);
+            textBox1.Clear();
+
+            //string bb = ShowBitmap(bmp);
+            //textBox1.AppendText(bb);
+
+            // compute operator @ 0,0
+
+            //selectedOperator.Apply(0, 0, bmp, true, textBox1);
+            //textBox1.AppendText("\r\n  .........................................  \r\n");
+            //selectedOperator.Apply(3, 3, bmp, true, textBox1);
+            //textBox1.AppendText("\r\n  .........................................  \r\n");
+            //selectedOperator.Apply(6, 3, bmp, true, textBox1);
         }
 
-        private void button3_Click(object sender, EventArgs e) {
+        #endregion
+
+        #region Bulk Actions
+
+        private void ProcessAllImageSetsButton_Click(object sender, EventArgs e) {
+            // commented out as a safety catch 
+            ProcessDir(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+            ProcessDir(dirTrainNotFaceBmp, "cmu_", "D5", 0, 4547, "trainDataNotFace.txt", 0, true);
+            ProcessDir(dirTestFaceBmp, "cmu_", "D4", 0, 471, "testDataFace.txt", 1, true);
+            ProcessDir(dirTestNotFaceBmp, "cmu_", "D4", 0, 23572, "testDataNotFace.txt", 0, true);
+        }
+        private void RenameFilesButton_Click(object sender, EventArgs e) {
             // Rename Files in dirTrainNotFaceBmpOld 
 
             string[] filePaths = Directory.GetFiles(dirTrainNotFaceBmpOld);
@@ -107,181 +191,32 @@ namespace ImageProcessor {
 
 
                 string fromFile = dirTrainNotFaceBmpOld + f;
-                string toFile = dirTrainNotFaceBmp + textBox2.Text + i.ToString("D5") + ".bmp";
+                string toFile = dirTrainNotFaceBmp + TrainFacePrefixTextBox.Text + i.ToString("D5") + ".bmp";
                 // copyFile(fromFile, toFile);
 
                 //if (i > 10) break;
-                copyFile(fromFile, toFile, i);
+                CopyFile(fromFile, toFile, i);
 
             }
         }
 
-        /// <summary>
-        /// multiply (not a matrix multiply) two 3x3 matrixes
-        /// put result back in a
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        public void threeBythreeMultiply(int[,] a, int[,] b) {
-            for (int y = 0; y < 3; y++) {
-                for (int x = 0; x < 3; x++) {
-                    a[x, y] = a[x, y] * b[x, y];
-                }
-            }
+        private void ExitButton_Click_1(object sender, EventArgs e) {
+            Close();
         }
 
-        public int threeBythreeSum(int[,] a) {
-            int sum = 0;
-            for (int y = 0; y < 3; y++) {
-                for (int x = 0; x < 3; x++) {
-                    sum = sum + a[x, y];
-                }
-            }
-            return sum;
-        }
+        #endregion
 
-        public string threebythreeToString(int[,] a, string heading) {
-            string t = "";
-            if (heading != "") t = t + heading + "\r\n";
-            for (int y = 0; y < 3; y++) {
-                t = t + a[0, y].ToString() + " " + a[1, y].ToString() + " " + a[2, y].ToString() + "\r\n";
-            }
-            return t;
-        }
+        #region Train Image Set Actions
 
-        double computeOperator(int xx, int yy, Bitmap bmp, bool show) {
-            for (int y = 0; y < 3; y++) {
-                for (int x = 0; x < 3; x++) {
-                    Color c = bmp.GetPixel(x + xx, y + yy);
-                    sXtemp[x, y] = c.R;
-                    sYtemp[x, y] = c.R;
-                }
-            }
-
-            if (show) {
-                textBox1.AppendText(threebythreeToString(sXtemp, "sXtemp"));
-                textBox1.AppendText(threebythreeToString(sYtemp, "sYtemp"));
-
-                textBox1.AppendText(threebythreeToString(operatorX, operatorXName));
-                textBox1.AppendText(threebythreeToString(operatorY, operatorYName));
-            }
-            threeBythreeMultiply(sXtemp, operatorX);
-            threeBythreeMultiply(sYtemp, operatorY);
-
-
-            sX = threeBythreeSum(sXtemp);
-            sY = threeBythreeSum(sYtemp);
-            mathOperator = Math.Abs(sX) + Math.Abs(sY);
-            if (show) {
-                textBox1.AppendText(threebythreeToString(sXtemp, "sXtemp"));
-                textBox1.AppendText(threebythreeToString(sYtemp, "sYtemp"));
-                textBox1.AppendText("sX=" + sX.ToString() + " " + "sY=" + sY.ToString() + " operator=" + mathOperator.ToString());
-            }
-            return mathOperator;
-        }
-
-        public string showBitmap(Bitmap bmp) {
-            string s = "";
-
-            for (int y = 0; y < 19; y++) {
-                for (int x = 0; x < 19; x++) {
-                    Color c = bmp.GetPixel(x, y);
-                    string ss = c.R.ToString() + " ";
-                    s = s + ss;
-                }
-                s = s + "\r\n";
-            }
-            return s;
-        }
-
-        private void button4_Click(object sender, EventArgs e) {
-            // test 2
-            bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
-
-            pictureBox1.Image = bmp;
-
-            textBox1.Clear();
-
-            string bb = showBitmap(bmp);
-            textBox1.AppendText(bb);
-
-            // compute sobel @ 0,0
-
-            computeOperator(0, 0, bmp, true);
-
-            textBox1.AppendText("\r\n  .........................................  \r\n");
-
-            computeOperator(3, 3, bmp, true);
-
-            textBox1.AppendText("\r\n  .........................................  \r\n");
-
-            computeOperator(6, 3, bmp, true);
-
-        }
-
-        private void button8_Click(object sender, EventArgs e) {
-            // test 2
-            bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
-
-            pictureBox1.Image = bmp;
-
-            textBox1.Clear();
-
-            string bb = showBitmap(bmp);
-            textBox1.AppendText(bb);
-
-            // compute kirsch @ 0,0
-
-            computeOperator(0, 0, bmp, true);
-
-            textBox1.AppendText("\r\n  .........................................  \r\n");
-
-            computeOperator(3, 3, bmp, true);
-
-            textBox1.AppendText("\r\n  .........................................  \r\n");
-
-            computeOperator(6, 3, bmp, true);
-
-        }
-
-        public string processImage(string fileName, int classification, bool show) {
-            string retv = "";
-
-            bmp = new Bitmap(fileName, false);
-
-            pictureBox1.Image = bmp;
-
-            if (show) {
-
-                textBox1.AppendText("\r\n  .#.....................................#.  \r\n");
-                textBox1.AppendText("Fname = " + fileName + "\r\n");
-                string bb = showBitmap(bmp);
-                textBox1.AppendText(bb);
-                textBox1.AppendText("  .-.....................................-.  \r\n");
-            }
-
-            for (int yy = 0; yy < 7; yy++) {
-                for (int xx = 0; xx < 7; xx++) {
-                    double s = computeOperator(gaps[xx], gaps[yy], bmp, false);
-                    //if (show) { textBox1.AppendText(s.ToString() + " "); }
-                    retv = retv + s.ToString() + " ";
-                }
-            }
-            retv = retv + classification.ToString();
-            if (show) { textBox1.AppendText(retv); }
-            return retv;
-
-        }
-
-        private void button5_Click(object sender, EventArgs e) {
+        private void TrainFaceBoth_Click(object sender, EventArgs e) {
             // test3
             textBox1.Clear();
 
             string fname = dirTrainFaceBmp + "face00001.bmp";
-            string val = processImage(fname, 0, true);
+            string val = ProcessImage(fname, 0, true);
 
             string fname2 = dirTrainFaceBmp + "face00002.bmp";
-            string val2 = processImage(fname2, 0, true);
+            string val2 = ProcessImage(fname2, 0, true);
 
             //bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
 
@@ -306,11 +241,31 @@ namespace ImageProcessor {
 
         }
 
-        private void button6_Click(object sender, EventArgs e) {
-            processDir(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+        private void ProcessTrainFacesButton_Click(object sender, EventArgs e) {
+            ProcessDir(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
         }
 
-        public void processDir(string inputDirectory, string prefix, string formatS, int lowVal, int hiVal, string outputFile, int classification, bool show) {
+        private void ProcessTrainNotFaceButton_Click(object sender, EventArgs e) {
+            ProcessDir(dirTrainNotFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+        }
+
+        #endregion
+
+        #region Test Image Set Actions
+
+        private void ProcessTestFaceButton_Click(object sender, EventArgs e) {
+            ProcessDir(dirTestFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+        }
+
+        private void ProcessTestNotFaceButton_Click(object sender, EventArgs e) {
+            ProcessDir(dirTestNotFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+        }
+
+        #endregion
+
+        #region Util Methods
+
+        private void ProcessDir(string inputDirectory, string prefix, string formatS, int lowVal, int hiVal, string outputFile, int classification, bool show) {
             // test 4 process a directory
 
             //string inputDirectory = dirTrainFaceBmp;
@@ -331,7 +286,7 @@ namespace ImageProcessor {
                 string fname = inputDirectory + prefix + i.ToString(formatS) + ".bmp";
                 textBox1.AppendText("Process> " + fname + " into " + outName + "\r\n");
 
-                string val = processImage(fname, classification, false);
+                string val = ProcessImage(fname, classification, false);
 
                 if (i < 10 && show) {
                     textBox1.AppendText(val + "\r\n");
@@ -345,31 +300,122 @@ namespace ImageProcessor {
 
         }
 
-        private void button7_Click(object sender, EventArgs e) {
-            // commented out as a safety catch 
-            // processDir(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+        public string ShowBitmap(Bitmap bmp) {
+            string s = "";
 
-            //  processDir(dirTrainNotFaceBmp, "cmu_", "D5", 0, 4547, "trainDataNotFace.txt", 0, true);
-
-            //  processDir(dirTestFaceBmp, "cmu_", "D4", 0, 471, "testDataFace.txt", 1, true);
-
-            //  processDir(dirTestNotFaceBmp, "cmu_", "D4", 0, 23572, "testDataNotFace.txt", 0, true);
+            for (int y = 0; y < 19; y++) {
+                for (int x = 0; x < 19; x++) {
+                    Color c = bmp.GetPixel(x, y);
+                    string ss = c.R.ToString() + " ";
+                    s = s + ss;
+                }
+                s = s + "\r\n";
+            }
+            return s;
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) {
-            // sobel operator radio button clicked
-            operatorX = sobelX;
-            operatorY = sobelY;
-            operatorXName = "sobelX";
-            operatorYName = "sobelY";
+        public string ProcessImage(string fileName, int classification, bool show) {
+            string retv = "";
+
+            bmp = new Bitmap(fileName, false);
+
+            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, 1.0 / 4.0);
+
+            if (show) {
+
+                textBox1.AppendText("\r\n  .#.....................................#.  \r\n");
+                textBox1.AppendText("Fname = " + fileName + "\r\n");
+                string bb = ShowBitmap(bmp);
+                textBox1.AppendText(bb);
+                textBox1.AppendText("  .-.....................................-.  \r\n");
+            }
+
+            //for (int yy = 0; yy < 7; yy++) {
+            //    for (int xx = 0; xx < 7; xx++) {
+            //        double s = selectedOperator.Apply(gaps[xx], gaps[yy], bmp, false, textBox1);
+            //        //if (show) { textBox1.AppendText(s.ToString() + " "); }
+            //        retv = retv + s.ToString() + " ";
+            //    }
+            //}
+            retv = retv + classification.ToString();
+            if (show) { textBox1.AppendText(retv); }
+            return retv;
+
         }
 
-        private void radioButton2_CheckedChanged(object sender, EventArgs e) {
-            // kirsch operator radio button clicked
-            operatorX = kirschX;
-            operatorY = kirschY;
-            operatorXName = "kirschX";
-            operatorYName = "kirschY";
+        private void CopyFile(string fromFile, string toFile, int i) {
+            //textBox1.Text = textBox1.Text + "from >>" + fromFile + "\r\n";
+            //textBox1.Text = textBox1.Text + "to   >>" + toFile + "\r\n\r\n";            
+            string m1 = "from >>" + fromFile + "\r\n";
+            string m2 = "to   >>" + toFile + "\r\n\r\n";
+            textBox1.AppendText(m1);
+            textBox1.AppendText(m2);
+
+            //File.Copy(fromFile, toFile, true); // - basically commented out as a saftey catch
         }
+        #endregion
+
+        #region Operator Radio Button Clicks
+
+        private void Prewitt3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Prewitt3x3x4;
+        }
+
+        private void Prewitt3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Prewitt3x3x8;
+        }
+
+        private void Prewitt5x5x4RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Prewitt5x5x4;
+        }
+
+        private void Kirsch3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Kirsch3x3x1;
+        }
+
+        private void Kirsch3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Kirsch3x3x4;
+        }
+
+        private void Kirsch3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Kirsch3x3x8;
+        }
+
+        private void Sobel3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Sobel3x3x1;
+        }
+
+        private void Sobel3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Sobel3x3x4;
+        }
+
+        private void Sobel3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Sobel3x3x8;
+        }
+
+        private void Sobel5x5x4RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Sobel5x5x4;
+        }
+
+        private void Scharr3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Scharr3x3x4;
+        }
+
+        private void Scharr3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Scharr3x3x8;
+        }
+
+        private void Scharr5x5x4RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Scharr5x5x4;
+        }
+
+        private void Isotropic3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Isotropic3x3x4;
+        }
+
+        private void Isotropic3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = ConvolutionUtils.Matrix.Isotropic3x3x8;
+        }
+        #endregion
     }
 }
