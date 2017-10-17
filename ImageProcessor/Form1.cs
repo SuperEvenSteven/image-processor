@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ImageProcessor {
@@ -32,64 +33,31 @@ namespace ImageProcessor {
                     }
                 }
 
-                if (show) {
-                    tb.AppendText(ThreebythreeToString(TempX, "tempX"));
-                    tb.AppendText(ThreebythreeToString(TempY, "tempY"));
+                //if (show) {
+                //    tb.AppendText(ThreebythreeToString(TempX, "tempX"));
+                //    tb.AppendText(ThreebythreeToString(TempY, "tempY"));
 
-                    tb.AppendText(ThreebythreeToString(OperatorX, Name));
-                    tb.AppendText(ThreebythreeToString(OperatorY, Name));
-                }
-                ThreeBythreeMultiply(TempX, OperatorX);
-                ThreeBythreeMultiply(TempY, OperatorY);
+                //    tb.AppendText(ThreebythreeToString(OperatorX, Name));
+                //    tb.AppendText(ThreebythreeToString(OperatorY, Name));
+                //}
+                //ThreeBythreeMultiply(TempX, OperatorX);
+                //ThreeBythreeMultiply(TempY, OperatorY);
 
 
-                x = ThreeBythreeSum(TempX);
-                y = ThreeBythreeSum(TempY);
-                mathOperator = Math.Abs(x) + Math.Abs(y);
-                if (show) {
-                    tb.AppendText(ThreebythreeToString(TempX, "tempX"));
-                    tb.AppendText(ThreebythreeToString(TempY, "tempY"));
-                    tb.AppendText("sX=" + x.ToString() + " " + "sY=" + x.ToString() + " operator=" + mathOperator.ToString());
-                }
+                //x = ThreeBythreeSum(TempX);
+                //y = ThreeBythreeSum(TempY);
+                //mathOperator = Math.Abs(x) + Math.Abs(y);
+                //if (show) {
+                //    tb.AppendText(ThreebythreeToString(TempX, "tempX"));
+                //    tb.AppendText(ThreebythreeToString(TempY, "tempY"));
+                //    tb.AppendText("sX=" + x.ToString() + " " + "sY=" + x.ToString() + " operator=" + mathOperator.ToString());
+                //}
                 return mathOperator;
-            }
-
-            /// <summary>
-            /// multiply (not a matrix multiply) two 3x3 matrixes
-            /// put result back in a
-            /// </summary>
-            /// <param name="a"></param>
-            /// <param name="b"></param>
-            private void ThreeBythreeMultiply(int[,] a, int[,] b) {
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 3; x++) {
-                        a[x, y] = a[x, y] * b[x, y];
-                    }
-                }
-            }
-
-            private int ThreeBythreeSum(int[,] a) {
-                int sum = 0;
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 3; x++) {
-                        sum = sum + a[x, y];
-                    }
-                }
-                return sum;
-            }
-
-            private string ThreebythreeToString(int[,] a, string heading) {
-                string t = "";
-                if (heading != "") t = t + heading + "\r\n";
-                for (int y = 0; y < 3; y++) {
-                    t = t + a[0, y].ToString() + " " + a[1, y].ToString() + " " + a[2, y].ToString() + "\r\n";
-                }
-                return t;
             }
         }
 
+
         #region Member variables
-        private readonly int[] gaps = new int[7] { 0, 3, 6, 8, 10, 13, 16 };
         private string dirTestFaceBmp = @"C:\Temp\IPP\FaceData\TestFaceBmp\";
         private string dirTestNotFaceBmp = @"C:\Temp\IPP\FaceData\TestNotFaceBmp\";
         private string dirTrainFaceBmp = @"C:\Temp\IPP\FaceData\TrainFaceBmp\";
@@ -105,7 +73,7 @@ namespace ImageProcessor {
         Bitmap bmp = null;
 
         // https://homepages.inf.ed.ac.uk/rbf/HIPR2/canny.htm
-        private double[,,] selectedOperator = ConvolutionUtils.Matrix.Sobel3x3x8;
+        private double[,,] selectedOperator = Convolution.Matrix.Sobel3x3x8;
         #endregion
 
         public Form1() {
@@ -128,7 +96,6 @@ namespace ImageProcessor {
 
         #region Debug Button Clicks
         private void DisplayAsRawRGBButton_Click(object sender, EventArgs e) {
-            // test 1
             bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
             PreviewPictureBox.Image = bmp;
             textBox1.Clear();
@@ -147,10 +114,9 @@ namespace ImageProcessor {
         }
 
         private void PreviewOperatorButton_Click(object sender, EventArgs e) {
-            // test 2
             bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
 
-            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, 1.0 / 4.0);
+            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, textBox1, 1.0 / 4.0);
             textBox1.Clear();
 
             //string bb = ShowBitmap(bmp);
@@ -209,7 +175,6 @@ namespace ImageProcessor {
         #region Train Image Set Actions
 
         private void TrainFaceBoth_Click(object sender, EventArgs e) {
-            // test3
             textBox1.Clear();
 
             string fname = dirTrainFaceBmp + "face00001.bmp";
@@ -266,8 +231,6 @@ namespace ImageProcessor {
         #region Util Methods
 
         private void ProcessDir(string inputDirectory, string prefix, string formatS, int lowVal, int hiVal, string outputFile, int classification, bool show) {
-            // test 4 process a directory
-
             //string inputDirectory = dirTrainFaceBmp;
             //string prefix = "face";
             //string formatS = "D5";
@@ -319,7 +282,7 @@ namespace ImageProcessor {
 
             bmp = new Bitmap(fileName, false);
 
-            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, 1.0 / 4.0);
+            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, textBox1, 1.0 / 4.0);
 
             if (show) {
 
@@ -330,13 +293,11 @@ namespace ImageProcessor {
                 textBox1.AppendText("  .-.....................................-.  \r\n");
             }
 
-            //for (int yy = 0; yy < 7; yy++) {
-            //    for (int xx = 0; xx < 7; xx++) {
-            //        double s = selectedOperator.Apply(gaps[xx], gaps[yy], bmp, false, textBox1);
-            //        //if (show) { textBox1.AppendText(s.ToString() + " "); }
-            //        retv = retv + s.ToString() + " ";
-            //    }
-            //}
+            // convert the bitmap using the operator against R, G, B and Alpha
+            var redBytes = Convolution.ConvolutionFilterAsBytes(bmp, selectedOperator, textBox1);
+            // build a line of all Red values
+            for (int i = 0; i < redBytes.Length; i++) { retv += redBytes[i]; }
+
             retv = retv + classification.ToString();
             if (show) { textBox1.AppendText(retv); }
             return retv;
@@ -357,64 +318,64 @@ namespace ImageProcessor {
 
         #region Operator Radio Button Clicks
 
+        private void Prewitt3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = Convolution.Matrix.Prewitt3x3x1;
+        }
+
         private void Prewitt3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Prewitt3x3x4;
+            selectedOperator = Convolution.Matrix.Prewitt3x3x4;
         }
 
         private void Prewitt3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Prewitt3x3x8;
-        }
-
-        private void Prewitt5x5x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Prewitt5x5x4;
+            selectedOperator = Convolution.Matrix.Prewitt3x3x8;
         }
 
         private void Kirsch3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Kirsch3x3x1;
+            selectedOperator = Convolution.Matrix.Kirsch3x3x1;
         }
 
         private void Kirsch3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Kirsch3x3x4;
+            selectedOperator = Convolution.Matrix.Kirsch3x3x4;
         }
 
         private void Kirsch3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Kirsch3x3x8;
+            selectedOperator = Convolution.Matrix.Kirsch3x3x8;
         }
 
         private void Sobel3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Sobel3x3x1;
+            selectedOperator = Convolution.Matrix.Sobel3x3x1;
         }
 
         private void Sobel3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Sobel3x3x4;
+            selectedOperator = Convolution.Matrix.Sobel3x3x4;
         }
 
         private void Sobel3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Sobel3x3x8;
+            selectedOperator = Convolution.Matrix.Sobel3x3x8;
         }
 
-        private void Sobel5x5x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Sobel5x5x4;
+        private void Scharr3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = Convolution.Matrix.Scharr3x3x1;
         }
 
         private void Scharr3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Scharr3x3x4;
+            selectedOperator = Convolution.Matrix.Scharr3x3x4;
         }
 
         private void Scharr3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Scharr3x3x8;
+            selectedOperator = Convolution.Matrix.Scharr3x3x8;
         }
 
-        private void Scharr5x5x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Scharr5x5x4;
+        private void Isotropic3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
+            selectedOperator = Convolution.Matrix.Isotropic3x3x1;
         }
 
         private void Isotropic3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Isotropic3x3x4;
+            selectedOperator = Convolution.Matrix.Isotropic3x3x4;
         }
 
         private void Isotropic3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = ConvolutionUtils.Matrix.Isotropic3x3x8;
+            selectedOperator = Convolution.Matrix.Isotropic3x3x8;
         }
         #endregion
     }

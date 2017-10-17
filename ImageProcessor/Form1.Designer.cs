@@ -39,6 +39,16 @@
             this.TrainFacePrefixTextBox = new System.Windows.Forms.TextBox();
             this.ProcessTrainNotFacesButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Isotropic3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Isotropic3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Scharr3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Scharr3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Sobel3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Sobel3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Kirsch3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Kirsch3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Prewitt3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Prewitt3x3x4RadioButton = new System.Windows.Forms.RadioButton();
             this.Kirsch3x3x1RadioButton = new System.Windows.Forms.RadioButton();
             this.Sobel3x3x1RadioButton = new System.Windows.Forms.RadioButton();
             this.TestingGroupBox = new System.Windows.Forms.GroupBox();
@@ -59,19 +69,9 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.Prewitt3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Prewitt3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Prewitt5x5x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Kirsch3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Kirsch3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Sobel3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Sobel3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Sobel5x5x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Scharr3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Scharr3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Scharr5x5x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Isotropic3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Isotropic3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Prewitt3x3x1RadioButton = new System.Windows.Forms.RadioButton();
+            this.Scharr3x3x1RadioButton = new System.Windows.Forms.RadioButton();
+            this.Isotropic3x3x1RadioButton = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPictureBox)).BeginInit();
             this.groupBox6.SuspendLayout();
@@ -185,17 +185,17 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.Isotropic3x3x1RadioButton);
+            this.groupBox1.Controls.Add(this.Scharr3x3x1RadioButton);
+            this.groupBox1.Controls.Add(this.Prewitt3x3x1RadioButton);
             this.groupBox1.Controls.Add(this.Isotropic3x3x8RadioButton);
             this.groupBox1.Controls.Add(this.Isotropic3x3x4RadioButton);
-            this.groupBox1.Controls.Add(this.Scharr5x5x4RadioButton);
             this.groupBox1.Controls.Add(this.Scharr3x3x8RadioButton);
             this.groupBox1.Controls.Add(this.Scharr3x3x4RadioButton);
-            this.groupBox1.Controls.Add(this.Sobel5x5x4RadioButton);
             this.groupBox1.Controls.Add(this.Sobel3x3x8RadioButton);
             this.groupBox1.Controls.Add(this.Sobel3x3x4RadioButton);
             this.groupBox1.Controls.Add(this.Kirsch3x3x8RadioButton);
             this.groupBox1.Controls.Add(this.Kirsch3x3x4RadioButton);
-            this.groupBox1.Controls.Add(this.Prewitt5x5x4RadioButton);
             this.groupBox1.Controls.Add(this.Prewitt3x3x8RadioButton);
             this.groupBox1.Controls.Add(this.Prewitt3x3x4RadioButton);
             this.groupBox1.Controls.Add(this.Kirsch3x3x1RadioButton);
@@ -208,6 +208,136 @@
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Operators";
+            // 
+            // Isotropic3x3x8RadioButton
+            // 
+            this.Isotropic3x3x8RadioButton.AutoSize = true;
+            this.Isotropic3x3x8RadioButton.Location = new System.Drawing.Point(10, 339);
+            this.Isotropic3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Isotropic3x3x8RadioButton.Name = "Isotropic3x3x8RadioButton";
+            this.Isotropic3x3x8RadioButton.Size = new System.Drawing.Size(131, 17);
+            this.Isotropic3x3x8RadioButton.TabIndex = 14;
+            this.Isotropic3x3x8RadioButton.TabStop = true;
+            this.Isotropic3x3x8RadioButton.Text = "Isotropic 3x3 8xRotate";
+            this.Isotropic3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Isotropic3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x8RadioButton_CheckedChanged);
+            // 
+            // Isotropic3x3x4RadioButton
+            // 
+            this.Isotropic3x3x4RadioButton.AutoSize = true;
+            this.Isotropic3x3x4RadioButton.Location = new System.Drawing.Point(10, 316);
+            this.Isotropic3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Isotropic3x3x4RadioButton.Name = "Isotropic3x3x4RadioButton";
+            this.Isotropic3x3x4RadioButton.Size = new System.Drawing.Size(131, 17);
+            this.Isotropic3x3x4RadioButton.TabIndex = 13;
+            this.Isotropic3x3x4RadioButton.TabStop = true;
+            this.Isotropic3x3x4RadioButton.Text = "Isotropic 3x3 4xRotate";
+            this.Isotropic3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Isotropic3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x4RadioButton_CheckedChanged);
+            // 
+            // Scharr3x3x8RadioButton
+            // 
+            this.Scharr3x3x8RadioButton.AutoSize = true;
+            this.Scharr3x3x8RadioButton.Location = new System.Drawing.Point(10, 270);
+            this.Scharr3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Scharr3x3x8RadioButton.Name = "Scharr3x3x8RadioButton";
+            this.Scharr3x3x8RadioButton.Size = new System.Drawing.Size(122, 17);
+            this.Scharr3x3x8RadioButton.TabIndex = 11;
+            this.Scharr3x3x8RadioButton.TabStop = true;
+            this.Scharr3x3x8RadioButton.Text = "Scharr 3x3 8xRotate";
+            this.Scharr3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Scharr3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x8RadioButton_CheckedChanged);
+            // 
+            // Scharr3x3x4RadioButton
+            // 
+            this.Scharr3x3x4RadioButton.AutoSize = true;
+            this.Scharr3x3x4RadioButton.Location = new System.Drawing.Point(10, 247);
+            this.Scharr3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Scharr3x3x4RadioButton.Name = "Scharr3x3x4RadioButton";
+            this.Scharr3x3x4RadioButton.Size = new System.Drawing.Size(122, 17);
+            this.Scharr3x3x4RadioButton.TabIndex = 10;
+            this.Scharr3x3x4RadioButton.TabStop = true;
+            this.Scharr3x3x4RadioButton.Text = "Scharr 3x3 4xRotate";
+            this.Scharr3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Scharr3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x4RadioButton_CheckedChanged);
+            // 
+            // Sobel3x3x8RadioButton
+            // 
+            this.Sobel3x3x8RadioButton.AutoSize = true;
+            this.Sobel3x3x8RadioButton.Location = new System.Drawing.Point(10, 201);
+            this.Sobel3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Sobel3x3x8RadioButton.Name = "Sobel3x3x8RadioButton";
+            this.Sobel3x3x8RadioButton.Size = new System.Drawing.Size(118, 17);
+            this.Sobel3x3x8RadioButton.TabIndex = 8;
+            this.Sobel3x3x8RadioButton.TabStop = true;
+            this.Sobel3x3x8RadioButton.Text = "Sobel 3x3 8xRotate";
+            this.Sobel3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Sobel3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x8RadioButton_CheckedChanged);
+            // 
+            // Sobel3x3x4RadioButton
+            // 
+            this.Sobel3x3x4RadioButton.AutoSize = true;
+            this.Sobel3x3x4RadioButton.Location = new System.Drawing.Point(10, 178);
+            this.Sobel3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Sobel3x3x4RadioButton.Name = "Sobel3x3x4RadioButton";
+            this.Sobel3x3x4RadioButton.Size = new System.Drawing.Size(118, 17);
+            this.Sobel3x3x4RadioButton.TabIndex = 7;
+            this.Sobel3x3x4RadioButton.TabStop = true;
+            this.Sobel3x3x4RadioButton.Text = "Sobel 3x3 4xRotate";
+            this.Sobel3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Sobel3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x4RadioButton_CheckedChanged);
+            // 
+            // Kirsch3x3x8RadioButton
+            // 
+            this.Kirsch3x3x8RadioButton.AutoSize = true;
+            this.Kirsch3x3x8RadioButton.Location = new System.Drawing.Point(10, 132);
+            this.Kirsch3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Kirsch3x3x8RadioButton.Name = "Kirsch3x3x8RadioButton";
+            this.Kirsch3x3x8RadioButton.Size = new System.Drawing.Size(120, 17);
+            this.Kirsch3x3x8RadioButton.TabIndex = 6;
+            this.Kirsch3x3x8RadioButton.TabStop = true;
+            this.Kirsch3x3x8RadioButton.Text = "Kirsch 3x3 8xRotate";
+            this.Kirsch3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Kirsch3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x8RadioButton_CheckedChanged);
+            // 
+            // Kirsch3x3x4RadioButton
+            // 
+            this.Kirsch3x3x4RadioButton.AutoSize = true;
+            this.Kirsch3x3x4RadioButton.Location = new System.Drawing.Point(10, 109);
+            this.Kirsch3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Kirsch3x3x4RadioButton.Name = "Kirsch3x3x4RadioButton";
+            this.Kirsch3x3x4RadioButton.Size = new System.Drawing.Size(120, 17);
+            this.Kirsch3x3x4RadioButton.TabIndex = 5;
+            this.Kirsch3x3x4RadioButton.TabStop = true;
+            this.Kirsch3x3x4RadioButton.Text = "Kirsch 3x3 4xRotate";
+            this.Kirsch3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Kirsch3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x4RadioButton_CheckedChanged);
+            // 
+            // Prewitt3x3x8RadioButton
+            // 
+            this.Prewitt3x3x8RadioButton.AutoSize = true;
+            this.Prewitt3x3x8RadioButton.Location = new System.Drawing.Point(10, 63);
+            this.Prewitt3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Prewitt3x3x8RadioButton.Name = "Prewitt3x3x8RadioButton";
+            this.Prewitt3x3x8RadioButton.Size = new System.Drawing.Size(123, 17);
+            this.Prewitt3x3x8RadioButton.TabIndex = 3;
+            this.Prewitt3x3x8RadioButton.TabStop = true;
+            this.Prewitt3x3x8RadioButton.Text = "Prewitt 3x3 8xRotate";
+            this.Prewitt3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Prewitt3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x8RadioButton_CheckedChanged);
+            // 
+            // Prewitt3x3x4RadioButton
+            // 
+            this.Prewitt3x3x4RadioButton.AutoSize = true;
+            this.Prewitt3x3x4RadioButton.Location = new System.Drawing.Point(10, 40);
+            this.Prewitt3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Prewitt3x3x4RadioButton.Name = "Prewitt3x3x4RadioButton";
+            this.Prewitt3x3x4RadioButton.Size = new System.Drawing.Size(123, 17);
+            this.Prewitt3x3x4RadioButton.TabIndex = 2;
+            this.Prewitt3x3x4RadioButton.TabStop = true;
+            this.Prewitt3x3x4RadioButton.Text = "Prewitt 3x3 4xRotate";
+            this.Prewitt3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Prewitt3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x4RadioButton_CheckedChanged);
             // 
             // Kirsch3x3x1RadioButton
             // 
@@ -406,174 +536,44 @@
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // Prewitt3x3x4RadioButton
+            // Prewitt3x3x1RadioButton
             // 
-            this.Prewitt3x3x4RadioButton.AutoSize = true;
-            this.Prewitt3x3x4RadioButton.Location = new System.Drawing.Point(10, 17);
-            this.Prewitt3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Prewitt3x3x4RadioButton.Name = "Prewitt3x3x4RadioButton";
-            this.Prewitt3x3x4RadioButton.Size = new System.Drawing.Size(123, 17);
-            this.Prewitt3x3x4RadioButton.TabIndex = 2;
-            this.Prewitt3x3x4RadioButton.TabStop = true;
-            this.Prewitt3x3x4RadioButton.Text = "Prewitt 3x3 4xRotate";
-            this.Prewitt3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Prewitt3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x4RadioButton_CheckedChanged);
+            this.Prewitt3x3x1RadioButton.AutoSize = true;
+            this.Prewitt3x3x1RadioButton.Location = new System.Drawing.Point(10, 17);
+            this.Prewitt3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Prewitt3x3x1RadioButton.Name = "Prewitt3x3x1RadioButton";
+            this.Prewitt3x3x1RadioButton.Size = new System.Drawing.Size(123, 17);
+            this.Prewitt3x3x1RadioButton.TabIndex = 15;
+            this.Prewitt3x3x1RadioButton.TabStop = true;
+            this.Prewitt3x3x1RadioButton.Text = "Prewitt 3x3 1xRotate";
+            this.Prewitt3x3x1RadioButton.UseVisualStyleBackColor = true;
+            this.Prewitt3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x1RadioButton_CheckedChanged);
             // 
-            // Prewitt3x3x8RadioButton
+            // Scharr3x3x1RadioButton
             // 
-            this.Prewitt3x3x8RadioButton.AutoSize = true;
-            this.Prewitt3x3x8RadioButton.Location = new System.Drawing.Point(10, 40);
-            this.Prewitt3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Prewitt3x3x8RadioButton.Name = "Prewitt3x3x8RadioButton";
-            this.Prewitt3x3x8RadioButton.Size = new System.Drawing.Size(123, 17);
-            this.Prewitt3x3x8RadioButton.TabIndex = 3;
-            this.Prewitt3x3x8RadioButton.TabStop = true;
-            this.Prewitt3x3x8RadioButton.Text = "Prewitt 3x3 8xRotate";
-            this.Prewitt3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Prewitt3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x8RadioButton_CheckedChanged);
+            this.Scharr3x3x1RadioButton.AutoSize = true;
+            this.Scharr3x3x1RadioButton.Location = new System.Drawing.Point(10, 224);
+            this.Scharr3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Scharr3x3x1RadioButton.Name = "Scharr3x3x1RadioButton";
+            this.Scharr3x3x1RadioButton.Size = new System.Drawing.Size(122, 17);
+            this.Scharr3x3x1RadioButton.TabIndex = 16;
+            this.Scharr3x3x1RadioButton.TabStop = true;
+            this.Scharr3x3x1RadioButton.Text = "Scharr 3x3 1xRotate";
+            this.Scharr3x3x1RadioButton.UseVisualStyleBackColor = true;
+            this.Scharr3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x1RadioButton_CheckedChanged);
             // 
-            // Prewitt5x5x4RadioButton
+            // Isotropic3x3x1RadioButton
             // 
-            this.Prewitt5x5x4RadioButton.AutoSize = true;
-            this.Prewitt5x5x4RadioButton.Location = new System.Drawing.Point(10, 63);
-            this.Prewitt5x5x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Prewitt5x5x4RadioButton.Name = "Prewitt5x5x4RadioButton";
-            this.Prewitt5x5x4RadioButton.Size = new System.Drawing.Size(123, 17);
-            this.Prewitt5x5x4RadioButton.TabIndex = 4;
-            this.Prewitt5x5x4RadioButton.TabStop = true;
-            this.Prewitt5x5x4RadioButton.Text = "Prewitt 5x5 4xRotate";
-            this.Prewitt5x5x4RadioButton.UseVisualStyleBackColor = true;
-            this.Prewitt5x5x4RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt5x5x4RadioButton_CheckedChanged);
-            // 
-            // Kirsch3x3x4RadioButton
-            // 
-            this.Kirsch3x3x4RadioButton.AutoSize = true;
-            this.Kirsch3x3x4RadioButton.Location = new System.Drawing.Point(10, 109);
-            this.Kirsch3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Kirsch3x3x4RadioButton.Name = "Kirsch3x3x4RadioButton";
-            this.Kirsch3x3x4RadioButton.Size = new System.Drawing.Size(120, 17);
-            this.Kirsch3x3x4RadioButton.TabIndex = 5;
-            this.Kirsch3x3x4RadioButton.TabStop = true;
-            this.Kirsch3x3x4RadioButton.Text = "Kirsch 3x3 4xRotate";
-            this.Kirsch3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Kirsch3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x4RadioButton_CheckedChanged);
-            // 
-            // Kirsch3x3x8RadioButton
-            // 
-            this.Kirsch3x3x8RadioButton.AutoSize = true;
-            this.Kirsch3x3x8RadioButton.Location = new System.Drawing.Point(10, 132);
-            this.Kirsch3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Kirsch3x3x8RadioButton.Name = "Kirsch3x3x8RadioButton";
-            this.Kirsch3x3x8RadioButton.Size = new System.Drawing.Size(120, 17);
-            this.Kirsch3x3x8RadioButton.TabIndex = 6;
-            this.Kirsch3x3x8RadioButton.TabStop = true;
-            this.Kirsch3x3x8RadioButton.Text = "Kirsch 3x3 8xRotate";
-            this.Kirsch3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Kirsch3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x8RadioButton_CheckedChanged);
-            // 
-            // Sobel3x3x4RadioButton
-            // 
-            this.Sobel3x3x4RadioButton.AutoSize = true;
-            this.Sobel3x3x4RadioButton.Location = new System.Drawing.Point(10, 178);
-            this.Sobel3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Sobel3x3x4RadioButton.Name = "Sobel3x3x4RadioButton";
-            this.Sobel3x3x4RadioButton.Size = new System.Drawing.Size(118, 17);
-            this.Sobel3x3x4RadioButton.TabIndex = 7;
-            this.Sobel3x3x4RadioButton.TabStop = true;
-            this.Sobel3x3x4RadioButton.Text = "Sobel 3x3 4xRotate";
-            this.Sobel3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Sobel3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x4RadioButton_CheckedChanged);
-            // 
-            // Sobel3x3x8RadioButton
-            // 
-            this.Sobel3x3x8RadioButton.AutoSize = true;
-            this.Sobel3x3x8RadioButton.Location = new System.Drawing.Point(10, 201);
-            this.Sobel3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Sobel3x3x8RadioButton.Name = "Sobel3x3x8RadioButton";
-            this.Sobel3x3x8RadioButton.Size = new System.Drawing.Size(118, 17);
-            this.Sobel3x3x8RadioButton.TabIndex = 8;
-            this.Sobel3x3x8RadioButton.TabStop = true;
-            this.Sobel3x3x8RadioButton.Text = "Sobel 3x3 8xRotate";
-            this.Sobel3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Sobel3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x8RadioButton_CheckedChanged);
-            // 
-            // Sobel5x5x4RadioButton
-            // 
-            this.Sobel5x5x4RadioButton.AutoSize = true;
-            this.Sobel5x5x4RadioButton.Location = new System.Drawing.Point(10, 224);
-            this.Sobel5x5x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Sobel5x5x4RadioButton.Name = "Sobel5x5x4RadioButton";
-            this.Sobel5x5x4RadioButton.Size = new System.Drawing.Size(118, 17);
-            this.Sobel5x5x4RadioButton.TabIndex = 9;
-            this.Sobel5x5x4RadioButton.TabStop = true;
-            this.Sobel5x5x4RadioButton.Text = "Sobel 5x5 4xRotate";
-            this.Sobel5x5x4RadioButton.UseVisualStyleBackColor = true;
-            this.Sobel5x5x4RadioButton.CheckedChanged += new System.EventHandler(this.Sobel5x5x4RadioButton_CheckedChanged);
-            // 
-            // Scharr3x3x4RadioButton
-            // 
-            this.Scharr3x3x4RadioButton.AutoSize = true;
-            this.Scharr3x3x4RadioButton.Location = new System.Drawing.Point(10, 247);
-            this.Scharr3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Scharr3x3x4RadioButton.Name = "Scharr3x3x4RadioButton";
-            this.Scharr3x3x4RadioButton.Size = new System.Drawing.Size(122, 17);
-            this.Scharr3x3x4RadioButton.TabIndex = 10;
-            this.Scharr3x3x4RadioButton.TabStop = true;
-            this.Scharr3x3x4RadioButton.Text = "Scharr 3x3 4xRotate";
-            this.Scharr3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Scharr3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x4RadioButton_CheckedChanged);
-            // 
-            // Scharr3x3x8RadioButton
-            // 
-            this.Scharr3x3x8RadioButton.AutoSize = true;
-            this.Scharr3x3x8RadioButton.Location = new System.Drawing.Point(10, 270);
-            this.Scharr3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Scharr3x3x8RadioButton.Name = "Scharr3x3x8RadioButton";
-            this.Scharr3x3x8RadioButton.Size = new System.Drawing.Size(122, 17);
-            this.Scharr3x3x8RadioButton.TabIndex = 11;
-            this.Scharr3x3x8RadioButton.TabStop = true;
-            this.Scharr3x3x8RadioButton.Text = "Scharr 3x3 8xRotate";
-            this.Scharr3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Scharr3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x8RadioButton_CheckedChanged);
-            // 
-            // Scharr5x5x4RadioButton
-            // 
-            this.Scharr5x5x4RadioButton.AutoSize = true;
-            this.Scharr5x5x4RadioButton.Location = new System.Drawing.Point(10, 293);
-            this.Scharr5x5x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Scharr5x5x4RadioButton.Name = "Scharr5x5x4RadioButton";
-            this.Scharr5x5x4RadioButton.Size = new System.Drawing.Size(122, 17);
-            this.Scharr5x5x4RadioButton.TabIndex = 12;
-            this.Scharr5x5x4RadioButton.TabStop = true;
-            this.Scharr5x5x4RadioButton.Text = "Scharr 5x5 4xRotate";
-            this.Scharr5x5x4RadioButton.UseVisualStyleBackColor = true;
-            this.Scharr5x5x4RadioButton.CheckedChanged += new System.EventHandler(this.Scharr5x5x4RadioButton_CheckedChanged);
-            // 
-            // Isotropic3x3x4RadioButton
-            // 
-            this.Isotropic3x3x4RadioButton.AutoSize = true;
-            this.Isotropic3x3x4RadioButton.Location = new System.Drawing.Point(10, 316);
-            this.Isotropic3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Isotropic3x3x4RadioButton.Name = "Isotropic3x3x4RadioButton";
-            this.Isotropic3x3x4RadioButton.Size = new System.Drawing.Size(131, 17);
-            this.Isotropic3x3x4RadioButton.TabIndex = 13;
-            this.Isotropic3x3x4RadioButton.TabStop = true;
-            this.Isotropic3x3x4RadioButton.Text = "Isotropic 3x3 4xRotate";
-            this.Isotropic3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Isotropic3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x4RadioButton_CheckedChanged);
-            // 
-            // Isotropic3x3x8RadioButton
-            // 
-            this.Isotropic3x3x8RadioButton.AutoSize = true;
-            this.Isotropic3x3x8RadioButton.Location = new System.Drawing.Point(10, 339);
-            this.Isotropic3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Isotropic3x3x8RadioButton.Name = "Isotropic3x3x8RadioButton";
-            this.Isotropic3x3x8RadioButton.Size = new System.Drawing.Size(131, 17);
-            this.Isotropic3x3x8RadioButton.TabIndex = 14;
-            this.Isotropic3x3x8RadioButton.TabStop = true;
-            this.Isotropic3x3x8RadioButton.Text = "Isotropic 3x3 8xRotate";
-            this.Isotropic3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Isotropic3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x8RadioButton_CheckedChanged);
+            this.Isotropic3x3x1RadioButton.AutoSize = true;
+            this.Isotropic3x3x1RadioButton.Location = new System.Drawing.Point(10, 293);
+            this.Isotropic3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Isotropic3x3x1RadioButton.Name = "Isotropic3x3x1RadioButton";
+            this.Isotropic3x3x1RadioButton.Size = new System.Drawing.Size(131, 17);
+            this.Isotropic3x3x1RadioButton.TabIndex = 17;
+            this.Isotropic3x3x1RadioButton.TabStop = true;
+            this.Isotropic3x3x1RadioButton.Text = "Isotropic 3x3 1xRotate";
+            this.Isotropic3x3x1RadioButton.UseVisualStyleBackColor = true;
+            this.Isotropic3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x1RadioButton_CheckedChanged);
             // 
             // Form1
             // 
@@ -638,16 +638,16 @@
         private System.Windows.Forms.RadioButton Prewitt3x3x4RadioButton;
         private System.Windows.Forms.RadioButton Isotropic3x3x8RadioButton;
         private System.Windows.Forms.RadioButton Isotropic3x3x4RadioButton;
-        private System.Windows.Forms.RadioButton Scharr5x5x4RadioButton;
         private System.Windows.Forms.RadioButton Scharr3x3x8RadioButton;
         private System.Windows.Forms.RadioButton Scharr3x3x4RadioButton;
-        private System.Windows.Forms.RadioButton Sobel5x5x4RadioButton;
         private System.Windows.Forms.RadioButton Sobel3x3x8RadioButton;
         private System.Windows.Forms.RadioButton Sobel3x3x4RadioButton;
         private System.Windows.Forms.RadioButton Kirsch3x3x8RadioButton;
         private System.Windows.Forms.RadioButton Kirsch3x3x4RadioButton;
-        private System.Windows.Forms.RadioButton Prewitt5x5x4RadioButton;
         private System.Windows.Forms.RadioButton Prewitt3x3x8RadioButton;
+        private System.Windows.Forms.RadioButton Prewitt3x3x1RadioButton;
+        private System.Windows.Forms.RadioButton Scharr3x3x1RadioButton;
+        private System.Windows.Forms.RadioButton Isotropic3x3x1RadioButton;
     }
 }
 
