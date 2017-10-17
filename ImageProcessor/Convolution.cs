@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -9,7 +11,7 @@ namespace ImageProcessor {
     /// <summary>
     /// Compass edge detection original author:  Dewald Esterhuizen
     ///  
-    /// Heavily modified for use in comparison against Robert Cox's 3x3 Sobel Operator.
+    /// Heavily modified for use in an experimental comparison against Robert Cox's 3x3 Sobel Operator.
     /// 
     /// For research use in Soft Computing - University of Canberra.
     /// 
@@ -24,161 +26,7 @@ namespace ImageProcessor {
         /// <summary>
         /// Operator definitions.
         /// </summary>
-        public static class Matrix {
-
-            public static double[,,] Prewitt3x3x1 {
-                get {
-                    double[,,] baseKernel = new double[,,] { { {  -1,  0,  1,  },
-                                                         {        -1,  0,  1,  },
-                                                         {        -1,  0,  1,  }, } };
-
-
-
-
-                    return baseKernel;
-                }
-            }
-
-            public static double[,,] Prewitt3x3x4 {
-                get {
-                    double[,] baseKernel = new double[,] { {  -1,  0,  1,  },
-                                                         {    -1,  0,  1,  },
-                                                         {    -1,  0,  1,  }, };
-
-
-                    double[,,] kernel = RotateMatrix(baseKernel, 90);
-
-
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Prewitt3x3x8 {
-                get {
-                    double[,] baseKernel = new double[,] { {  -1,  0,  1,  },
-                                                         {    -1,  0,  1,  },
-                                                         {    -1,  0,  1,  }, };
-                    double[,,] kernel = RotateMatrix(baseKernel, 45);
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Kirsch3x3x1 {
-                get {
-                    double[,,] baseKernel = new double[,,] { { {  -3, -3,  5,  },
-                                                           {      -3,  0,  5,  },
-                                                           {      -3, -3,  5,  }, } };
-                    return baseKernel;
-                }
-            }
-
-            public static double[,,] Kirsch3x3x4 {
-                get {
-                    double[,] baseKernel = new double[,] { {  -3, -3,  5,  },
-                                                           {  -3,  0,  5,  },
-                                                           {  -3, -3,  5,  }, };
-                    double[,,] kernel = RotateMatrix(baseKernel, 90);
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Kirsch3x3x8 {
-                get {
-                    double[,] baseKernel = new double[,] { {  -3, -3,  5,  },
-                                                           {  -3,  0,  5,  },
-                                                           {  -3, -3,  5,  }, };
-                    double[,,] kernel = RotateMatrix(baseKernel, 45);
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Sobel3x3x1 {
-                get {
-                    double[,,] baseKernel = new double[,,] { { {  -1,  0,  1,  },
-                                                           {      -2,  0,  2,  },
-                                                           {      -1,  0,  1,  }, }};
-                    return baseKernel;
-                }
-            }
-
-            public static double[,,] Sobel3x3x4 {
-                get {
-                    double[,] baseKernel = new double[,] { {  -1,  0,  1,  },
-                                                           {  -2,  0,  2,  },
-                                                           {  -1,  0,  1,  }, };
-                    double[,,] kernel = RotateMatrix(baseKernel, 90);
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Sobel3x3x8 {
-                get {
-                    double[,] baseKernel = new double[,] { {  -1,  0,  1,  },
-                                                           {  -2,  0,  2,  },
-                                                           {  -1,  0,  1,  }, };
-                    double[,,] kernel = RotateMatrix(baseKernel, 45);
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Scharr3x3x1 {
-                get {
-                    double[,,] baseKernel = new double[,,] { { {  -1,  0,  1,  },
-                                                           {      -3,  0,  3,  },
-                                                           {      -1,  0,  1,  }, } };
-                    return baseKernel;
-                }
-            }
-
-            public static double[,,] Scharr3x3x4 {
-                get {
-                    double[,] baseKernel = new double[,] { {  -1,  0,  1,  },
-                                                           {  -3,  0,  3,  },
-                                                           {  -1,  0,  1,  }, };
-                    double[,,] kernel = RotateMatrix(baseKernel, 90);
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Scharr3x3x8 {
-                get {
-                    double[,] baseKernel = new double[,] { {  -1,  0,  1,  },
-                                                           {  -3,  0,  3,  },
-                                                           {  -1,  0,  1,  }, };
-                    double[,,] kernel = RotateMatrix(baseKernel, 45);
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Isotropic3x3x1 {
-                get {
-                    double[,,] baseKernel = new double[,,] { { {             -1,  0,             1,  },
-                                                           {      -Math.Sqrt(2),  0,  Math.Sqrt(2),  },
-                                                           {                 -1,  0,             1,  },  } };
-                    return baseKernel;
-                }
-            }
-
-            public static double[,,] Isotropic3x3x4 {
-                get {
-                    double[,] baseKernel = new double[,] { {             -1,  0,             1,  },
-                                                           {  -Math.Sqrt(2),  0,  Math.Sqrt(2),  },
-                                                           {             -1,  0,             1,  },  };
-                    double[,,] kernel = RotateMatrix(baseKernel, 90);
-                    return kernel;
-                }
-            }
-
-            public static double[,,] Isotropic3x3x8 {
-                get {
-                    double[,] baseKernel = new double[,] { {             -1,  0,             1,  },
-                                                           {  -Math.Sqrt(2),  0,  Math.Sqrt(2),  },
-                                                           {             -1,  0,             1,  }, };
-                    double[,,] kernel = RotateMatrix(baseKernel, 45);
-                    return kernel;
-                }
-            }
-        }
+        
 
         private static readonly int[] gaps = new int[7] { 0, 3, 6, 8, 10, 13, 16 };
 
@@ -192,7 +40,7 @@ namespace ImageProcessor {
         /// <returns></returns>
         public static Bitmap ConvolutionFilter(this Bitmap sourceBitmap, double[,,] filterMatrix, TextBox tb, double factor = 1, int bias = 0) {
             byte[] resultBuffer = ConvolutionFilterAsBytes(sourceBitmap, filterMatrix, tb, factor, bias);
-            Bitmap resultBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height);
+            Bitmap resultBitmap = new Bitmap(7, 7);
 
             BitmapData resultData = resultBitmap.LockBits(new Rectangle(0, 0, resultBitmap.Width, resultBitmap.Height),
                 ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
@@ -214,164 +62,117 @@ namespace ImageProcessor {
         /// <param name="bias"></param>
         /// <returns></returns>
         public static byte[] ConvolutionFilterAsBytes(Bitmap sourceBitmap, double[,,] filterMatrix, TextBox tb, double factor = 1, int bias = 0) {
-            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height), ImageLockMode.ReadOnly,
-                                                 PixelFormat.Format32bppArgb);
 
-            byte[] pixelBuffer = new byte[sourceData.Stride * sourceData.Height];
-            byte[] resultBuffer = new byte[sourceData.Stride * sourceData.Height];
+            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, 7, 7), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            byte[] pixelBuffer = new byte[sourceData.Stride * 7];
+            byte[] resultBuffer = new byte[sourceData.Stride * 7];
 
             Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
             sourceBitmap.UnlockBits(sourceData);
 
-            int filterWidth = filterMatrix.GetLength(1);
-            //int filterHeight = filterMatrix.GetLength(0);
-            int filterOffset = (filterWidth - 1) / 2;
             int byteOffset = 0;
-            byte[] rgbByte = new byte[3];
+            int retv = 0;
 
-            //for (int yy = 0; yy < 7; yy++) {
-            //for (int xx = 0; xx < 7; xx++) {
-            //double s = selectedOperator.Apply(gaps[xx], gaps[yy], bmp, false, textBox1);
-            //if (show) { textBox1.AppendText(s.ToString() + " "); }
-            //retv = retv + s.ToString() + " ";
-            //}
-            //}
-            //retv = retv + classification.ToString();
-            //if (show) { textBox1.AppendText(retv); }
-
-
-            // Iterate width and height of the given image, assuming a 19x19 pixel image.
-            // Check a grid of numbers and multiple the central value against the operator
-            // as shown in the lecture slides. Move the grid in 3x3 increments like a stamp
-            // until all the image has been covered.
-            for (int offsetY = filterOffset; offsetY < sourceBitmap.Height - filterOffset; offsetY++) {
-                for (int offsetX = filterOffset; offsetX < sourceBitmap.Width - filterOffset; offsetX++) {
-                    byteOffset = offsetY *
-                                 sourceData.Stride +
-                                 offsetX * 4;
-                    // perform operator multiply and save the rgba values as bytes to the buffer
-                    rgbByte = ComputeOperator(filterMatrix, filterOffset, byteOffset, pixelBuffer, factor, bias, sourceData);
-
-                    tb.AppendText(rgbByte[0] + " ");
-
-                    resultBuffer[byteOffset] = rgbByte[0];
-                    //resultBuffer[byteOffset + 1] = rgbByte[1];
-                    //resultBuffer[byteOffset + 2] = rgbByte[2];
-                    //resultBuffer[byteOffset + 3] = 255;
+            for (int yy = 0; yy < 7; yy++) {
+                for (int xx = 0; xx < 7; xx++) {
+                    retv = ComputeOperator(sourceBitmap, filterMatrix, gaps[xx], gaps[yy], tb);
+                    resultBuffer[byteOffset] = (byte)retv;
+                    resultBuffer[byteOffset + 1] = 0;
+                    resultBuffer[byteOffset + 2] = 0;
+                    resultBuffer[byteOffset + 3] = 255;
                 }
             }
             return resultBuffer;
         }
 
-        /// <summary>
-        /// Multiplies the R,G and B values against the given operator for each direction. Highest value wins!!!
-        /// Returns highest of R,G and B.
-        /// </summary>
-        /// <returns></returns>
-        private static byte[] ComputeOperator(double[,,] filterMatrix, int filterOffset, int byteOffset, byte[] pixelBuffer, double factor, int bias,
-            BitmapData sourceData) {
+        public static string ConvolutionFilterAsString(Bitmap sourceBitmap, double[,,] operators, TextBox tb, double factor = 1, int bias = 0) {
 
-            var highestRGB = new byte[3];
-            double blue = 0;
-            double green = 0;
-            double red = 0;
-            double blueCompass = 0.0;
-            double greenCompass = 0.0;
-            double redCompass = 0.0;
-            int calcOffset = 0;
+            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, 7, 7), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            byte[] pixelBuffer = new byte[sourceData.Stride * 7];
+            byte[] resultBuffer = new byte[sourceData.Stride * 7];
 
-            // Iterate through all the directional filters and take only the highest 
-            // 3x3 multiply.
-            for (int compass = 0; compass < filterMatrix.GetLength(0); compass++) {
+            Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            sourceBitmap.UnlockBits(sourceData);
 
-                blueCompass = 0.0;
-                greenCompass = 0.0;
-                redCompass = 0.0;
+            int filterWidth = operators.GetLength(1);
+            string retv = "";
+            int bytev = 0;
 
-                // go through each element in the filter and multiple the color values
-                for (int filterY = -filterOffset; filterY <= filterOffset; filterY++) {
-                    for (int filterX = -filterOffset; filterX <= filterOffset; filterX++) {
-                        calcOffset = byteOffset +
-                                     (filterX * 4) +
-                                     (filterY * sourceData.Stride); // move ever 3rd pixel
-
-                        blueCompass += (double)(pixelBuffer[calcOffset]) *
-                                        filterMatrix[compass,
-                                        filterY + filterOffset,
-                                        filterX + filterOffset];
-
-                        greenCompass += (double)(pixelBuffer[calcOffset + 1]) *
-                                        filterMatrix[compass,
-                                        filterY + filterOffset,
-                                        filterX + filterOffset];
-
-                        redCompass += (double)(pixelBuffer[calcOffset + 2]) *
-                                        filterMatrix[compass,
-                                        filterY + filterOffset,
-                                        filterX + filterOffset];
-                    }
+            for (int yy = 0; yy < 7; yy++) {
+                for (int xx = 0; xx < 7; xx++) {
+                    bytev = ComputeOperator(sourceBitmap, operators, gaps[xx], gaps[yy], tb);
+                    tb.AppendText(retv + " ");
+                    retv += " " + bytev;
                 }
-
-                // get the highest value of all, default to 0 if negative
-                blue = (blueCompass > blue ? blueCompass : blue);
-                green = (greenCompass > green ? greenCompass : green);
-                red = (redCompass > red ? redCompass : red);
             }
 
-            // apply bias if any
-            blue = factor * blue + bias;
-            green = factor * green + bias;
-            red = factor * red + bias;
-
-            // ensure max and min range are applied if the result is over or under
-            if (blue > 255) { blue = 255; } else if (blue < 0) { blue = 0; }
-            if (green > 255) { green = 255; } else if (green < 0) { green = 0; }
-            if (red > 255) { red = 255; } else if (red < 0) { red = 0; }
-
-            // return the highest rgb values
-            highestRGB[0] = (byte)(blue);
-            highestRGB[1] = (byte)(green);
-            highestRGB[2] = (byte)(red);
-            return highestRGB;
+            return retv;
         }
 
-
         /// <summary>
-        /// Rotates the given operator the given number of times and returns an array of all those
-        /// rotated operators.
+        /// Moves a 3x3 operator along the given bitmap, multiplies against it, sums up the 9 values and returns that
+        /// as a single paramter for a NN to train with.
         /// </summary>
-        /// <param name="baseKernel"></param>
-        /// <param name="degrees"></param>
         /// <returns></returns>
-        public static double[,,] RotateMatrix(double[,] baseKernel,
-                                         double degrees) {
-            double[,,] kernel = new double[(int)(360 / degrees),
-                baseKernel.GetLength(0), baseKernel.GetLength(1)];
+        private static int ComputeOperator(Bitmap bmp, double[,,] operators, int xOffset, int yOffset, TextBox tb) {
 
-            int xOffset = baseKernel.GetLength(1) / 2;
-            int yOffset = baseKernel.GetLength(0) / 2;
+            // holds the rotated operators and their calculated value of the pixel
+            var work = new List<Tuple<int[,], int[,]>>();
+            var pixelMatrix = new int[3, 3];
+            // Iterate through all the directional operators and generate work.
+            for (int compass = 0; compass < operators.GetLength(0); compass++) {
 
-            for (int y = 0; y < baseKernel.GetLength(0); y++) {
-                for (int x = 0; x < baseKernel.GetLength(1); x++) {
-                    for (int compass = 0; compass <
-                        kernel.GetLength(0); compass++) {
-                        double radians = compass * degrees *
-                                         Math.PI / 180.0;
+                int[,] currOperator = new int[3, 3];
 
-                        int resultX = (int)(Math.Round((x - xOffset) *
-                                   Math.Cos(radians) - (y - yOffset) *
-                                   Math.Sin(radians)) + xOffset);
+                // go through each element in the filter and multiple the color values
+                for (int y = 0; y < 3; y++) {
+                    for (int x = 0; x < 3; x++) {
 
-                        int resultY = (int)(Math.Round((x - xOffset) *
-                                    Math.Sin(radians) + (y - yOffset) *
-                                    Math.Cos(radians)) + yOffset);
+                        // get the red pixel
+                        Color c = bmp.GetPixel(x + xOffset, y + yOffset);
+                        pixelMatrix[x, y] = c.R;
 
-                        kernel[compass, resultY, resultX] =
-                                                    baseKernel[y, x];
+                        // basically line up the current operator with it's work, must be a nicer way?
+                        currOperator[x, y] = (int)operators[compass, x, y];
                     }
                 }
+
+                var operation = new Tuple<int[,], int[,]>(currOperator, pixelMatrix);
+                work.Add(operation);
             }
-            return kernel;
+
+            // list each pixel to be multiplied as a 3x3 matrix
+            work.ForEach(t => {
+                tb.AppendText(ThreebythreeToString(t.Item2, "sTemp"));
+            });
+
+            // list each operator as a 3x3 matrix
+            work.ForEach(t => {
+                tb.AppendText(ThreebythreeToString(t.Item1, "Operator"));
+            });
+
+            var multiplied = new List<int[,]>();
+            // multiply each 3x3 operator by the 3x3 pixels
+            work.ForEach(t => {
+                multiplied.Add(ThreeBythreeMultiply(t.Item1, t.Item2));
+            });
+
+            // display the resultant 3x3 pixel matrix after the 3x3 operator has multiplied against it
+            multiplied.ForEach(pixelMatrx => {
+                tb.AppendText(ThreebythreeToString(pixelMatrx, "sTemp"));
+            });
+
+            // now that the pixel matrices have been multiplied, sum each one up
+            int mathOperator = 0;
+            multiplied.ForEach(pixelMatrx => {
+                var sum = ThreeBythreeSum(pixelMatrx);
+                tb.AppendText("sum=" + sum.ToString() + " ");
+                mathOperator = Math.Abs(mathOperator) + Math.Abs(sum);
+            });
+
+            tb.AppendText("Sum of operators=" + mathOperator.ToString());
+            tb.AppendText("\r\n  .........................................  \r\n");
+            return mathOperator;
         }
 
         #region ThreeByThree Methods
@@ -381,12 +182,13 @@ namespace ImageProcessor {
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        private static void ThreeBythreeMultiply(int[,] a, int[,] b) {
+        private static int[,] ThreeBythreeMultiply(int[,] a, int[,] b) {
             for (int y = 0; y < 3; y++) {
                 for (int x = 0; x < 3; x++) {
                     a[x, y] = a[x, y] * b[x, y];
                 }
             }
+            return a;
         }
 
         private static int ThreeBythreeSum(int[,] a) {

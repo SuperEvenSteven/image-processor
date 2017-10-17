@@ -73,7 +73,7 @@ namespace ImageProcessor {
         Bitmap bmp = null;
 
         // https://homepages.inf.ed.ac.uk/rbf/HIPR2/canny.htm
-        private double[,,] selectedOperator = Convolution.Matrix.Sobel3x3x8;
+        private double[,,] selectedOperator = Matrix.Sobel3x3x8;
         #endregion
 
         public Form1() {
@@ -115,9 +115,10 @@ namespace ImageProcessor {
 
         private void PreviewOperatorButton_Click(object sender, EventArgs e) {
             bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
+            var retv = "";
 
             PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, textBox1, 1.0 / 4.0);
-            textBox1.Clear();
+            //textBox1.Clear();
 
             //string bb = ShowBitmap(bmp);
             //textBox1.AppendText(bb);
@@ -125,9 +126,13 @@ namespace ImageProcessor {
             // compute operator @ 0,0
 
             //selectedOperator.Apply(0, 0, bmp, true, textBox1);
-            //textBox1.AppendText("\r\n  .........................................  \r\n");
+            textBox1.AppendText("\r\n  .........................................  \r\n");
+            var redBytes = Convolution.ConvolutionFilterAsString(bmp, selectedOperator, textBox1, 1.0 / 4.0);
+
+            for (int i = 0; i < redBytes.Length; i++) { retv += redBytes[i]; }
+            textBox1.AppendText(retv + " 0");
             //selectedOperator.Apply(3, 3, bmp, true, textBox1);
-            //textBox1.AppendText("\r\n  .........................................  \r\n");
+            textBox1.AppendText("\r\n  .........................................  \r\n");
             //selectedOperator.Apply(6, 3, bmp, true, textBox1);
         }
 
@@ -319,63 +324,63 @@ namespace ImageProcessor {
         #region Operator Radio Button Clicks
 
         private void Prewitt3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Prewitt3x3x1;
+            selectedOperator = Matrix.Prewitt3x3x1;
         }
 
         private void Prewitt3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Prewitt3x3x4;
+            selectedOperator = Matrix.Prewitt3x3x4;
         }
 
         private void Prewitt3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Prewitt3x3x8;
+            selectedOperator = Matrix.Prewitt3x3x8;
         }
 
         private void Kirsch3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Kirsch3x3x1;
+            selectedOperator = Matrix.Kirsch3x3x1;
         }
 
         private void Kirsch3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Kirsch3x3x4;
+            selectedOperator = Matrix.Kirsch3x3x4;
         }
 
         private void Kirsch3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Kirsch3x3x8;
+            selectedOperator = Matrix.Kirsch3x3x8;
         }
 
         private void Sobel3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Sobel3x3x1;
+            selectedOperator = Matrix.Sobel3x3x1;
         }
 
         private void Sobel3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Sobel3x3x4;
+            selectedOperator = Matrix.Sobel3x3x4;
         }
 
         private void Sobel3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Sobel3x3x8;
+            selectedOperator = Matrix.Sobel3x3x8;
         }
 
         private void Scharr3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Scharr3x3x1;
+            selectedOperator = Matrix.Scharr3x3x1;
         }
 
         private void Scharr3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Scharr3x3x4;
+            selectedOperator = Matrix.Scharr3x3x4;
         }
 
         private void Scharr3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Scharr3x3x8;
+            selectedOperator = Matrix.Scharr3x3x8;
         }
 
         private void Isotropic3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Isotropic3x3x1;
+            selectedOperator = Matrix.Isotropic3x3x1;
         }
 
         private void Isotropic3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Isotropic3x3x4;
+            selectedOperator = Matrix.Isotropic3x3x4;
         }
 
         private void Isotropic3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Convolution.Matrix.Isotropic3x3x8;
+            selectedOperator = Matrix.Isotropic3x3x8;
         }
         #endregion
     }
