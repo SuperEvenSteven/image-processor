@@ -3,102 +3,50 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.ComponentModel;
+using ImageProcessor;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ImageProcessor {
     public partial class Form1 : Form {
 
-        internal class ImageOperator {
-
-            public ImageOperator() {
-                TempX = new int[3, 3];
-                TempY = new int[3, 3];
-            }
-
-            public int[,] OperatorX { get; set; }
-            public int[,] OperatorY { get; set; }
-            public string Name { get; set; }
-
-            public int[,] TempX { get; set; }
-            public int[,] TempY { get; set; }
-
-            double x, y = 0;
-            public double mathOperator = 0;
-
-            public double Apply(int xx, int yy, Bitmap bmp, bool show, TextBox tb) {
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 3; x++) {
-                        Color c = bmp.GetPixel(x + xx, y + yy);
-                        TempX[x, y] = c.R;
-                        TempY[x, y] = c.R;
-                    }
-                }
-
-                //if (show) {
-                //    tb.AppendText(ThreebythreeToString(TempX, "tempX"));
-                //    tb.AppendText(ThreebythreeToString(TempY, "tempY"));
-
-                //    tb.AppendText(ThreebythreeToString(OperatorX, Name));
-                //    tb.AppendText(ThreebythreeToString(OperatorY, Name));
-                //}
-                //ThreeBythreeMultiply(TempX, OperatorX);
-                //ThreeBythreeMultiply(TempY, OperatorY);
-
-
-                //x = ThreeBythreeSum(TempX);
-                //y = ThreeBythreeSum(TempY);
-                //mathOperator = Math.Abs(x) + Math.Abs(y);
-                //if (show) {
-                //    tb.AppendText(ThreebythreeToString(TempX, "tempX"));
-                //    tb.AppendText(ThreebythreeToString(TempY, "tempY"));
-                //    tb.AppendText("sX=" + x.ToString() + " " + "sY=" + x.ToString() + " operator=" + mathOperator.ToString());
-                //}
-                return mathOperator;
-            }
+        public enum ImageSetType {
+            [Description("Train face image set")]
+            TrainFace,
+            [Description("Train not face image set")]
+            TrainNotFace,
+            [Description("Test face image set")]
+            TestFace,
+            [Description("Test not face image set")]
+            TestNotFace
         }
-
 
         #region Member variables
         private string dirTestFaceBmp = @"C:\Temp\IPP\FaceData\TestFaceBmp\";
         private string dirTestNotFaceBmp = @"C:\Temp\IPP\FaceData\TestNotFaceBmp\";
         private string dirTrainFaceBmp = @"C:\Temp\IPP\FaceData\TrainFaceBmp\";
         private string dirTrainNotFaceBmp = @"C:\Temp\IPP\FaceData\TrainNotFaceBmp\";
-        private string dirTrainNotFaceBmpOld = @"C:\Temp\IPP\FaceData\TrainNotFaceBmpOld\";
 
-        // string prefix = "cmu_";
-        // int testFace = 471;
-        // int testNotFace = 23572;
-        // int trainFace = 2429;
-        // int trainNotFace = 4547;
-
+        //technically a filter since it's 2 or more operators
+        double[,,] selectedOperator;
         Bitmap bmp = null;
+        private int filesProcessed = 0;
+        private int totalFilesToProcess = 0;
+        private CancellationTokenSource cancelTokenSource;
+        private CancellationToken cancelToken;
 
-        // https://homepages.inf.ed.ac.uk/rbf/HIPR2/canny.htm
-        private double[,,] selectedOperator = Matrix.Sobel3x3x8;
         #endregion
 
         public Form1() {
             InitializeComponent();
-
-            //// initialise sobel operator
-            //sobelOperator = new ImageOperator {
-            //    OperatorX = new int[3, 3] { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } },
-            //    OperatorY = new int[3, 3] { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } },
-            //    Name = "sobel"
-            //};
-
-            //// initialise kirsch operator
-            //kirschOperator = new ImageOperator {
-            //    OperatorX = new int[3, 3] { { -5, 5, 3 }, { -5, 0, 3 }, { 3, 3, 3 } },
-            //    OperatorY = new int[3, 3] { { -5, -5, 3 }, { -5, 0, 3 }, { 3, 3, 3 } },
-            //    Name = "kirsch"
-            //};
         }
 
         #region Debug Button Clicks
         private void DisplayAsRawRGBButton_Click(object sender, EventArgs e) {
             bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
             PreviewPictureBox.Image = bmp;
-            textBox1.Clear();
+            outputTextBox.Clear();
 
             string s;
 
@@ -106,9 +54,9 @@ namespace ImageProcessor {
                 for (int x = 0; x < 19; x++) {
                     Color c = bmp.GetPixel(x, y);
                     s = "R" + c.R.ToString() + " " + "G" + c.G.ToString() + " " + "B" + c.B.ToString() + " ";
-                    textBox1.AppendText(s);
+                    outputTextBox.AppendText(s);
                 }
-                textBox1.AppendText("\r\n");
+                outputTextBox.AppendText("\r\n");
             }
 
         }
@@ -116,59 +64,52 @@ namespace ImageProcessor {
         private void PreviewOperatorButton_Click(object sender, EventArgs e) {
             bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
             var retv = "";
+            outputTextBox.Clear();
+            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, outputTextBox, true);
 
-            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, textBox1, 1.0 / 4.0);
-            //textBox1.Clear();
+            string bb = ShowBitmap(bmp);
+            outputTextBox.AppendText(bb);
 
-            //string bb = ShowBitmap(bmp);
-            //textBox1.AppendText(bb);
-
-            // compute operator @ 0,0
-
-            //selectedOperator.Apply(0, 0, bmp, true, textBox1);
-            textBox1.AppendText("\r\n  .........................................  \r\n");
-            var redBytes = Convolution.ConvolutionFilterAsString(bmp, selectedOperator, textBox1, 1.0 / 4.0);
-
+            outputTextBox.AppendText("\r\n  .........................................  \r\n");
+            var redBytes = Convolution.ConvolutionFilterAsString(bmp, selectedOperator, outputTextBox, true);
             for (int i = 0; i < redBytes.Length; i++) { retv += redBytes[i]; }
-            textBox1.AppendText(retv + " 0");
-            //selectedOperator.Apply(3, 3, bmp, true, textBox1);
-            textBox1.AppendText("\r\n  .........................................  \r\n");
-            //selectedOperator.Apply(6, 3, bmp, true, textBox1);
+            outputTextBox.AppendText(retv + " 0");
+            outputTextBox.AppendText("\r\n  .........................................  \r\n");
         }
 
         #endregion
 
-        #region Bulk Actions
+        #region Main Menu
 
         private void ProcessAllImageSetsButton_Click(object sender, EventArgs e) {
-            // commented out as a safety catch 
-            ProcessDir(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
-            ProcessDir(dirTrainNotFaceBmp, "cmu_", "D5", 0, 4547, "trainDataNotFace.txt", 0, true);
-            ProcessDir(dirTestFaceBmp, "cmu_", "D4", 0, 471, "testDataFace.txt", 1, true);
-            ProcessDir(dirTestNotFaceBmp, "cmu_", "D4", 0, 23572, "testDataNotFace.txt", 0, true);
+            ResetProgress(31019);
+            ProcessDirAsync(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+            ProcessDirAsync(dirTrainNotFaceBmp, "cmu_", "D5", 0, 4547, "trainDataNotFace.txt", 0, true);
+            ProcessDirAsync(dirTestFaceBmp, "cmu_", "D4", 0, 471, "testDataFace.txt", 1, true);
+            ProcessDirAsync(dirTestNotFaceBmp, "cmu_", "D4", 0, 23572, "testDataNotFace.txt", 0, true);
         }
         private void RenameFilesButton_Click(object sender, EventArgs e) {
-            // Rename Files in dirTrainNotFaceBmpOld 
 
-            string[] filePaths = Directory.GetFiles(dirTrainNotFaceBmpOld);
+        }
 
-            textBox1.Clear();
-            for (int i = 0; i < filePaths.Length; i++) {
+        private void RestoreDefaultsBtn_Click(object sender, EventArgs e) {
+            // default rename file prefixes
+            TrainFaceRenameTxtBx.Text = "cmu_";
+            TrainNotFaceRenameTxtBx.Text = "cmu_";
+            TestFaceRenameTxtBx.Text = "cmu_";
+            TestNotFaceRenameTxtBx.Text = "cmu_";
 
-                //textBox1.Text = textBox1.Text + filePaths[i] + "\r\n";
-                string ff = filePaths[i];
-                string f = Path.GetFileName(ff);
-                //textBox1.Text = textBox1.Text + f + "\r\n";
+            // default rename source dir
+            TrainFaceSrcDir.Text = "";
+            TrainNotFaceSrcDir.Text = "";
+            TestFaceSrcDir.Text = "";
+            TestNotFaceSrcDir.Text = "";
 
-
-                string fromFile = dirTrainNotFaceBmpOld + f;
-                string toFile = dirTrainNotFaceBmp + TrainFacePrefixTextBox.Text + i.ToString("D5") + ".bmp";
-                // copyFile(fromFile, toFile);
-
-                //if (i > 10) break;
-                CopyFile(fromFile, toFile, i);
-
-            }
+            // default rename dest dir
+            TrainFaceDestDir.Text = "";
+            TrainNotFaceDestDir.Text = "";
+            TestFaceDestDir.Text = "";
+            TestNotFaceDestDir.Text = "";
         }
 
         private void ExitButton_Click_1(object sender, EventArgs e) {
@@ -177,95 +118,121 @@ namespace ImageProcessor {
 
         #endregion
 
-        #region Train Image Set Actions
-
-        private void TrainFaceBoth_Click(object sender, EventArgs e) {
-            textBox1.Clear();
-
-            string fname = dirTrainFaceBmp + "face00001.bmp";
-            string val = ProcessImage(fname, 0, true);
-
-            string fname2 = dirTrainFaceBmp + "face00002.bmp";
-            string val2 = ProcessImage(fname2, 0, true);
-
-            //bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
-
-            //pictureBox1.Image = bmp;
-
-            //textBox1.Clear();
-
-            //string bb = showBitmap(bmp);
-            //textBox1.AppendText(bb);
-
-            //textBox1.AppendText("\r\n  .........................................  \r\n");
-
-
-            //for (int yy = 0; yy < 7; yy++)
-            //{
-            //    for (int xx = 0; xx < 7; xx++)
-            //    {
-            //        double s = computeSobel(gaps[xx], gaps[yy], bmp, false);
-            //        textBox1.AppendText(s.ToString() + " ");
-            //    }
-            //}
-
-        }
+        #region Image Set Processing Actions
 
         private void ProcessTrainFacesButton_Click(object sender, EventArgs e) {
-            ProcessDir(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+            if (!TrainFacePrefixTextBox.IsEmpty("Train face prefix,")) {
+                ResetProgress(2429);
+                ProcessDirAsync(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, false);
+            }
         }
 
-        private void ProcessTrainNotFaceButton_Click(object sender, EventArgs e) {
-            ProcessDir(dirTrainNotFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+        private void ProcessTrainNotFacesButton_Click(object sender, EventArgs e) {
+            if (!TrainNotFacePrefixTextBox.IsEmpty("Train not face prefix,")) {
+                ResetProgress(4547);
+                ProcessDirAsync(dirTrainNotFaceBmp, "face", "D5", 1, 4547, "trainDataNotFace.txt", 1, false);
+            }
         }
 
-        #endregion
-
-        #region Test Image Set Actions
+        private void ProcessTrainFaceBoth_Click(object sender, EventArgs e) {
+            if (!TrainNotFacePrefixTextBox.IsEmpty("Train not face prefix,") || !TrainFacePrefixTextBox.IsEmpty("Train face prefix,")) {
+                ResetProgress(2429 + 4547);
+                ProcessDirAsync(dirTrainFaceBmp, "face", "D5", 1, 2429, "trainData.txt", 1, false);
+                ProcessDirAsync(dirTrainNotFaceBmp, "face", "D5", 1, 4547, "trainData.txt", 1, false);
+            }
+        }
 
         private void ProcessTestFaceButton_Click(object sender, EventArgs e) {
-            ProcessDir(dirTestFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+            if (!TestFacePrefixTextBox.IsEmpty("Test face prefix,")) {
+                ResetProgress(471);
+                ProcessDirAsync(dirTestFaceBmp, "face", "D5", 1, 471, "testDataFace.txt", 1, false);
+            }
         }
 
-        private void ProcessTestNotFaceButton_Click(object sender, EventArgs e) {
-            ProcessDir(dirTestNotFaceBmp, "face", "D5", 1, 2429, "trainDataFace.txt", 1, true);
+        private void ProcessTestNotFacesButton_Click(object sender, EventArgs e) {
+            if (!TestNotFacePrefixTextBox.IsEmpty("Test not face prefix,")) {
+                ResetProgress(23572);
+                ProcessDirAsync(dirTestNotFaceBmp, "face", "D5", 1, 23572, "testDataNotFace.txt", 1, false);
+            }
+        }
+
+        private void ProcessBothTestButton_Click(object sender, EventArgs e) {
+            if (!TestNotFacePrefixTextBox.IsEmpty("Test not face prefix,") || !TestFacePrefixTextBox.IsEmpty("Test face prefix,")) {
+                ResetProgress(471 + 23572);
+                ProcessDirAsync(dirTestFaceBmp, "face", "D5", 1, 471, "testData.txt", 1, false);
+                ProcessDirAsync(dirTestNotFaceBmp, "face", "D5", 1, 23572, "testData.txt", 1, false);
+            }
+        }
+
+        private void ResetProgress(int numOfFiles) {
+            ImgProgressBar.Value = 0;
+            filesProcessed = 0;
+            PercentageComplete.Text = "0%";
+            totalFilesToProcess = numOfFiles;
         }
 
         #endregion
 
-        #region Util Methods
+        #region Bulk Image Manipulation
+        /// <summary>
+        /// Processes images in a directory using the selected mathematical operator. An output
+        /// of 49 int parameters followed by it's classification is appended to the given filename.
+        /// </summary>
+        /// <param name="inputDirectory"></param>
+        /// <param name="prefix">"face"</param>
+        /// <param name="formatS">"D5"</param>
+        /// <param name="lowVal">1</param>
+        /// <param name="hiVal">2429</param>
+        /// <param name="outputFile">"trainDataFace.txt"</param>
+        /// <param name="classification">0 or 1, i.e. face or not face</param>
+        /// <param name="show">verbosity</param>
+        private async void ProcessDirAsync(string inputDirectory, string prefix, string formatS, int lowVal, int hiVal, string outputFile, int classification, bool show) {
+            outputTextBox.Clear();
 
-        private void ProcessDir(string inputDirectory, string prefix, string formatS, int lowVal, int hiVal, string outputFile, int classification, bool show) {
-            //string inputDirectory = dirTrainFaceBmp;
-            //string prefix = "face";
-            //string formatS = "D5";
-            //int lowVal = 1;
-            //int hiVal = 2429;
-            //string outputFile = "trainDataFace.txt";
+            cancelTokenSource = new CancellationTokenSource();
+            cancelToken = cancelTokenSource.Token;
 
-            textBox1.Clear();
+            // create a Progress updater on the UI thread but without blocking it
+            var progress = new Progress<int>(epochsProcessed => {
+                filesProcessed++;
+                ImgProgressBar.Value = (filesProcessed / totalFilesToProcess) * 100;
+                PercentageComplete.Text = ImgProgressBar.Value + "%";
+            });
 
             string outName = inputDirectory + outputFile;
-            System.IO.StreamWriter file = new System.IO.StreamWriter(outName);
-            //file.WriteLine(lines);
 
-
-            for (int i = lowVal; i <= hiVal; i++) {
-                string fname = inputDirectory + prefix + i.ToString(formatS) + ".bmp";
-                textBox1.AppendText("Process> " + fname + " into " + outName + "\r\n");
-
-                string val = ProcessImage(fname, classification, false);
-
-                if (i < 10 && show) {
-                    textBox1.AppendText(val + "\r\n");
-                }
-                //if (i == 10) break; // debug exit
-
-                file.WriteLine(val);
+            try {
+                await Task.Factory.StartNew(() => Work(inputDirectory, prefix, formatS, lowVal, hiVal, outName, classification, show, progress), cancelToken);
+                outputTextBox.AppendText("UI thread be free");
+            } catch (OperationCanceledException e) {
+                outputTextBox.AppendText("Stopped!");
             }
+        }
 
-            file.Close();
+        private void Work(string inputDirectory, string prefix, string formatS, int lowVal, int hiVal, string outName, int classification, bool show, IProgress<int> progress) {
+            {
+                System.IO.StreamWriter file = new System.IO.StreamWriter(outName);
+                for (int i = lowVal; i <= hiVal; i++) {
+                    // handbrake
+                    cancelToken.ThrowIfCancellationRequested();
 
+                    string fname = inputDirectory + prefix + i.ToString(formatS) + ".bmp";
+                    //outputTextBox.AppendText("Process> " + fname + " into " + outName + "\r\n");
+
+                    string val = ProcessImage(fname, classification, false);
+
+                    if (i < 10 && show) {
+                        //outputTextBox.AppendText(val + "\r\n");
+                    }
+                    //if (i == 10) break; // debug exit
+
+                    file.WriteLine(val);
+
+                    // update progress bar
+                    progress.Report(1);
+                }
+                file.Close();
+            }
         }
 
         public string ShowBitmap(Bitmap bmp) {
@@ -287,38 +254,28 @@ namespace ImageProcessor {
 
             bmp = new Bitmap(fileName, false);
 
-            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, textBox1, 1.0 / 4.0);
+            PreviewPictureBox.Image = bmp.ConvolutionFilter(selectedOperator, outputTextBox, show);
 
             if (show) {
 
-                textBox1.AppendText("\r\n  .#.....................................#.  \r\n");
-                textBox1.AppendText("Fname = " + fileName + "\r\n");
+                //outputTextBox.AppendText("\r\n  .#.....................................#.  \r\n");
+                //outputTextBox.AppendText("Fname = " + fileName + "\r\n");
                 string bb = ShowBitmap(bmp);
-                textBox1.AppendText(bb);
-                textBox1.AppendText("  .-.....................................-.  \r\n");
+                //outputTextBox.AppendText(bb);
+                //outputTextBox.AppendText("  .-.....................................-.  \r\n");
             }
 
-            // convert the bitmap using the operator against R, G, B and Alpha
-            var redBytes = Convolution.ConvolutionFilterAsBytes(bmp, selectedOperator, textBox1);
+            // convert the bitmap using the given compass operator
+            var redBytes = Convolution.ConvolutionFilterAsBytes(bmp, selectedOperator, outputTextBox, show);
             // build a line of all Red values
             for (int i = 0; i < redBytes.Length; i++) { retv += redBytes[i]; }
 
             retv = retv + classification.ToString();
-            if (show) { textBox1.AppendText(retv); }
+            //if (show) { outputTextBox.AppendText(retv); }
             return retv;
 
         }
 
-        private void CopyFile(string fromFile, string toFile, int i) {
-            //textBox1.Text = textBox1.Text + "from >>" + fromFile + "\r\n";
-            //textBox1.Text = textBox1.Text + "to   >>" + toFile + "\r\n\r\n";            
-            string m1 = "from >>" + fromFile + "\r\n";
-            string m2 = "to   >>" + toFile + "\r\n\r\n";
-            textBox1.AppendText(m1);
-            textBox1.AppendText(m2);
-
-            //File.Copy(fromFile, toFile, true); // - basically commented out as a saftey catch
-        }
         #endregion
 
         #region Operator Radio Button Clicks
@@ -382,6 +339,135 @@ namespace ImageProcessor {
         private void Isotropic3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
             selectedOperator = Matrix.Isotropic3x3x8;
         }
+
         #endregion
+
+        #region Rename File Buttons
+
+        private void RenameTrainFaceBtn_Click(object sender, EventArgs e) {
+            RenameFiles(TrainFaceSrcDir.Text, TrainFaceDestDir.Text, TrainFaceRenameTxtBx.Text, "Train face file prefix");
+        }
+
+        private void RenameTrainNotFaceBtn_Click(object sender, EventArgs e) {
+            RenameFiles(TrainNotFaceRenameTxtBx.Text, TrainNotFaceSrcDir.Text, TrainNotFaceDestDir.Text, "Train not face file prefix");
+        }
+
+        private void RenameTestNotFaceBtn_Click(object sender, EventArgs e) {
+            RenameFiles(TestFaceRenameTxtBx.Text, TestFaceSrcDir.Text, TestFaceDestDir.Text, "Test not face file prefix");
+        }
+
+        private void RenameTestFaceButton_Click(object sender, EventArgs e) {
+            RenameFiles(TestNotFaceRenameTxtBx.Text, TestNotFaceSrcDir.Text, TestNotFaceDestDir.Text, "Test face file prefix");
+        }
+
+        private void RenameFiles(string dirFrom, string dirTo, string prefix, string imgSetName) {
+
+            if (prefix.IsEmpty(imgSetName)) // shows a waning box
+                return; // don't rename
+            if (!dirFrom.DirExists() || !dirTo.DirExists()) // shows a create directory question msg box
+                return; // don't rename
+
+            string[] filePaths = Directory.GetFiles(dirFrom);
+
+            outputTextBox.Clear();
+            for (int i = 0; i < filePaths.Length; i++) {
+
+                //textBox1.Text = textBox1.Text + filePaths[i] + "\r\n";
+                string ff = filePaths[i];
+                string f = Path.GetFileName(ff);
+                outputTextBox.Text = outputTextBox.Text + f + "\r\n";
+
+
+                string fromFile = dirFrom + f;
+                string toFile = dirTo + prefix + i.ToString("D5") + ".bmp";
+                CopyFile(fromFile, toFile);
+
+                if (i > 10) break;
+                CopyFile(fromFile, toFile);
+            }
+        }
+
+        private void CopyFile(string fromFile, string toFile) {
+            outputTextBox.Text = outputTextBox.Text + "from >>" + fromFile + "\r\n";
+            outputTextBox.Text = outputTextBox.Text + "to   >>" + toFile + "\r\n\r\n";
+            string m1 = "from >>" + fromFile + "\r\n";
+            string m2 = "to   >>" + toFile + "\r\n\r\n";
+            outputTextBox.AppendText(m1);
+            outputTextBox.AppendText(m2);
+
+            File.Copy(fromFile, toFile, true);
+        }
+        #endregion
+
+        #region Source & Destination Button Clicks
+        public void ChooseFolder(TextBox textBox) {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK) {
+                textBox.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
+        private void SrcTrainFaceBtn_Click(object sender, EventArgs e) {
+            ChooseFolder(TrainFaceSrcDir);
+        }
+
+        private void SrcTestNotaceBtn_Click(object sender, EventArgs e) {
+            ChooseFolder(TrainNotFaceSrcDir);
+        }
+
+        private void SrcTestFaceBtn_Click(object sender, EventArgs e) {
+            ChooseFolder(TrainFaceSrcDir);
+        }
+
+        private void SrcTestNotFaceBtn_Click(object sender, EventArgs e) {
+            ChooseFolder(TestFaceSrcDir);
+        }
+
+        private void DestTrainFaceBtn_Click(object sender, EventArgs e) {
+            ChooseFolder(TrainFaceDestDir);
+        }
+
+        private void DestTrainNotFaceBtn_Click(object sender, EventArgs e) {
+            ChooseFolder(TrainNotFaceDestDir);
+        }
+
+        private void DestTestFaceBtn_Click(object sender, EventArgs e) {
+            ChooseFolder(TrainFaceSrcDir);
+        }
+
+        private void DestTestNotFaceBtn_Click(object sender, EventArgs e) {
+            ChooseFolder(TestNotFaceDestDir);
+        }
+        #endregion
+
+        private void RenameAllImagesBtn_Click(object sender, EventArgs e) {
+
+            TrainFaceRenameTxtBx.Text = "";
+            TrainNotFaceRenameTxtBx.Text = "";
+            TestFaceRenameTxtBx.Text = "cmu_";
+            TestNotFaceRenameTxtBx.Text = "cmu_";
+
+            // default rename source dir
+            TrainFaceSrcDir.Text = "";
+            TrainNotFaceSrcDir.Text = "";
+            TestFaceSrcDir.Text = "";
+            TestNotFaceSrcDir.Text = "";
+
+            // default rename dest dir
+            TrainFaceDestDir.Text = "";
+            TrainNotFaceDestDir.Text = "";
+            TestFaceDestDir.Text = "";
+            TestNotFaceDestDir.Text = "";
+
+            RenameFiles(TrainFaceSrcDir.Text, TrainFaceDestDir.Text, TrainFaceRenameTxtBx.Text, "Train face file prefix");
+            RenameFiles(TrainNotFaceRenameTxtBx.Text, TrainNotFaceSrcDir.Text, TrainNotFaceDestDir.Text, "Train not face file prefix");
+            RenameFiles(TestFaceRenameTxtBx.Text, TestFaceSrcDir.Text, TestFaceDestDir.Text, "Test not face file prefix");
+            RenameFiles(TestNotFaceRenameTxtBx.Text, TestNotFaceSrcDir.Text, TestNotFaceDestDir.Text, "Test face file prefix");
+        }
+
+        private void StopButton_Click(object sender, EventArgs e) {
+            if (!cancelTokenSource.IsCancellationRequested) {
+                outputTextBox.AppendText("Stopping called!");
+                cancelTokenSource.Cancel();
+            }
+        }
     }
 }
