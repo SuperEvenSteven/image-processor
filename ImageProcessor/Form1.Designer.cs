@@ -33,6 +33,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.RenameTrainNotFaceBtn = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.CurrentStatusLabel = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.RenameTrainFaceBtn = new System.Windows.Forms.Button();
@@ -69,51 +71,51 @@
             this.TestFaceRenameTxtBx = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ProcessAllButton = new System.Windows.Forms.Button();
+            this.StopButton = new System.Windows.Forms.Button();
+            this.RestoreDefaultsBtn = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.ProcessTestFaceButton = new System.Windows.Forms.Button();
-            this.TestFacePrefixTextBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.ProcessTestNotFacesButton = new System.Windows.Forms.Button();
-            this.TestNotFacePrefixTextBox = new System.Windows.Forms.TextBox();
-            this.ProcessBothTestButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.ProcessBothTestButton = new System.Windows.Forms.Button();
+            this.TestNotFacePrefixTextBox = new System.Windows.Forms.TextBox();
+            this.ProcessTestNotFacesButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.TestFacePrefixTextBox = new System.Windows.Forms.TextBox();
+            this.ProcessTestFaceButton = new System.Windows.Forms.Button();
             this.TestingGroupBox = new System.Windows.Forms.GroupBox();
-            this.PreviewOperatorButton = new System.Windows.Forms.Button();
+            this.VerboseLoggingChkBx = new System.Windows.Forms.CheckBox();
             this.DisplayAsRawRGBButton = new System.Windows.Forms.Button();
+            this.PreviewOperatorButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.Sobel3x3x1RadioButton = new System.Windows.Forms.RadioButton();
-            this.Kirsch3x3x1RadioButton = new System.Windows.Forms.RadioButton();
-            this.Prewitt3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Prewitt3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Kirsch3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Kirsch3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Sobel3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Sobel3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Scharr3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Scharr3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Isotropic3x3x4RadioButton = new System.Windows.Forms.RadioButton();
-            this.Isotropic3x3x8RadioButton = new System.Windows.Forms.RadioButton();
-            this.Prewitt3x3x1RadioButton = new System.Windows.Forms.RadioButton();
-            this.Scharr3x3x1RadioButton = new System.Windows.Forms.RadioButton();
             this.Isotropic3x3x1RadioButton = new System.Windows.Forms.RadioButton();
+            this.Scharr3x3x1RadioButton = new System.Windows.Forms.RadioButton();
+            this.Prewitt3x3x1RadioButton = new System.Windows.Forms.RadioButton();
+            this.Isotropic3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Isotropic3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Scharr3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Scharr3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Sobel3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Sobel3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Kirsch3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Kirsch3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Prewitt3x3x8RadioButton = new System.Windows.Forms.RadioButton();
+            this.Prewitt3x3x4RadioButton = new System.Windows.Forms.RadioButton();
+            this.Kirsch3x3x1RadioButton = new System.Windows.Forms.RadioButton();
+            this.Sobel3x3x1RadioButton = new System.Windows.Forms.RadioButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.ProcessTrainNotFacesButton = new System.Windows.Forms.Button();
-            this.TrainFacePrefixTextBox = new System.Windows.Forms.TextBox();
-            this.ProcessTrainFacesButton = new System.Windows.Forms.Button();
-            this.TrainNotFacePrefixTextBox = new System.Windows.Forms.TextBox();
-            this.ProcessBothTrain = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ProcessBothTrain = new System.Windows.Forms.Button();
+            this.TrainNotFacePrefixTextBox = new System.Windows.Forms.TextBox();
+            this.ProcessTrainFacesButton = new System.Windows.Forms.Button();
+            this.TrainFacePrefixTextBox = new System.Windows.Forms.TextBox();
+            this.ProcessTrainNotFacesButton = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.EdgedPictureBox = new System.Windows.Forms.PictureBox();
             this.PreviewPictureBox = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.RestoreDefaultsBtn = new System.Windows.Forms.Button();
-            this.RenameAllImagesBtn = new System.Windows.Forms.Button();
             this.ImgProgressBar = new System.Windows.Forms.ProgressBar();
             this.PercentageComplete = new System.Windows.Forms.Label();
-            this.StopButton = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -125,6 +127,7 @@
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.EdgedPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPictureBox)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -150,7 +153,7 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 848);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 858);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1481, 22);
             this.statusStrip1.TabIndex = 3;
@@ -168,6 +171,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.CurrentStatusLabel);
+            this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Controls.Add(this.panel5);
             this.groupBox3.Controls.Add(this.panel4);
             this.groupBox3.Controls.Add(this.panel3);
@@ -179,9 +184,25 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Renaming Actions";
             // 
+            // CurrentStatusLabel
+            // 
+            this.CurrentStatusLabel.Location = new System.Drawing.Point(84, 216);
+            this.CurrentStatusLabel.Name = "CurrentStatusLabel";
+            this.CurrentStatusLabel.Size = new System.Drawing.Size(794, 13);
+            this.CurrentStatusLabel.TabIndex = 48;
+            this.CurrentStatusLabel.Text = "Idle";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(7, 216);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(77, 13);
+            this.label13.TabIndex = 47;
+            this.label13.Text = "Current Status:";
+            // 
             // panel5
             // 
-            this.panel5.Controls.Add(this.RenameAllImagesBtn);
             this.panel5.Controls.Add(this.label12);
             this.panel5.Controls.Add(this.RenameTrainFaceBtn);
             this.panel5.Controls.Add(this.RenameTestFaceButton);
@@ -189,7 +210,7 @@
             this.panel5.Controls.Add(this.RenameTestNotFaceBtn);
             this.panel5.Location = new System.Drawing.Point(884, 19);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(180, 211);
+            this.panel5.Size = new System.Drawing.Size(180, 182);
             this.panel5.TabIndex = 46;
             // 
             // label12
@@ -235,7 +256,7 @@
             this.panel4.Controls.Add(this.DestTestFaceBtn);
             this.panel4.Location = new System.Drawing.Point(594, 19);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(284, 211);
+            this.panel4.Size = new System.Drawing.Size(284, 182);
             this.panel4.TabIndex = 16;
             // 
             // label6
@@ -333,7 +354,7 @@
             this.panel3.Controls.Add(this.SrcTestNotaceBtn);
             this.panel3.Location = new System.Drawing.Point(7, 19);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(275, 211);
+            this.panel3.Size = new System.Drawing.Size(275, 182);
             this.panel3.TabIndex = 45;
             // 
             // TrainFaceSrcDir
@@ -358,7 +379,7 @@
             this.TestFaceSrcDir.Name = "TestFaceSrcDir";
             this.TestFaceSrcDir.Size = new System.Drawing.Size(222, 20);
             this.TestFaceSrcDir.TabIndex = 33;
-            this.TestFaceSrcDir.Text = "C:\\Temp\\IPP\\FaceData\\TestNotFaceBmp\\";
+            this.TestFaceSrcDir.Text = "C:\\Temp\\IPP\\FaceData\\TestFaceBmp\\";
             // 
             // TestNotFaceSrcDir
             // 
@@ -431,7 +452,7 @@
             this.panel2.Controls.Add(this.TestFaceRenameTxtBx);
             this.panel2.Location = new System.Drawing.Point(287, 19);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(301, 211);
+            this.panel2.Size = new System.Drawing.Size(301, 182);
             this.panel2.TabIndex = 44;
             // 
             // label11
@@ -525,23 +546,32 @@
             this.groupBox2.Controls.Add(this.StopButton);
             this.groupBox2.Controls.Add(this.RestoreDefaultsBtn);
             this.groupBox2.Controls.Add(this.ExitButton);
-            this.groupBox2.Controls.Add(this.ProcessAllButton);
             this.groupBox2.Location = new System.Drawing.Point(7, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(223, 142);
+            this.groupBox2.Size = new System.Drawing.Size(223, 114);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Main Menu";
             // 
-            // ProcessAllButton
+            // StopButton
             // 
-            this.ProcessAllButton.Location = new System.Drawing.Point(6, 19);
-            this.ProcessAllButton.Name = "ProcessAllButton";
-            this.ProcessAllButton.Size = new System.Drawing.Size(211, 23);
-            this.ProcessAllButton.TabIndex = 8;
-            this.ProcessAllButton.Text = "Process All";
-            this.ProcessAllButton.UseVisualStyleBackColor = true;
-            this.ProcessAllButton.Click += new System.EventHandler(this.ProcessAllImageSetsButton_Click);
+            this.StopButton.Location = new System.Drawing.Point(6, 19);
+            this.StopButton.Name = "StopButton";
+            this.StopButton.Size = new System.Drawing.Size(209, 23);
+            this.StopButton.TabIndex = 10;
+            this.StopButton.Text = "Stop";
+            this.StopButton.UseVisualStyleBackColor = true;
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
+            // 
+            // RestoreDefaultsBtn
+            // 
+            this.RestoreDefaultsBtn.Location = new System.Drawing.Point(7, 48);
+            this.RestoreDefaultsBtn.Name = "RestoreDefaultsBtn";
+            this.RestoreDefaultsBtn.Size = new System.Drawing.Size(211, 23);
+            this.RestoreDefaultsBtn.TabIndex = 9;
+            this.RestoreDefaultsBtn.Text = "Restore Defaults";
+            this.RestoreDefaultsBtn.UseVisualStyleBackColor = true;
+            this.RestoreDefaultsBtn.Click += new System.EventHandler(this.RestoreDefaultsBtn_Click);
             // 
             // ExitButton
             // 
@@ -562,57 +592,21 @@
             this.groupBox5.Controls.Add(this.label3);
             this.groupBox5.Controls.Add(this.TestFacePrefixTextBox);
             this.groupBox5.Controls.Add(this.ProcessTestFaceButton);
-            this.groupBox5.Location = new System.Drawing.Point(8, 317);
+            this.groupBox5.Location = new System.Drawing.Point(8, 300);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(223, 172);
+            this.groupBox5.Size = new System.Drawing.Size(223, 186);
             this.groupBox5.TabIndex = 13;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Test Image Set";
             // 
-            // ProcessTestFaceButton
+            // label4
             // 
-            this.ProcessTestFaceButton.Location = new System.Drawing.Point(6, 19);
-            this.ProcessTestFaceButton.Name = "ProcessTestFaceButton";
-            this.ProcessTestFaceButton.Size = new System.Drawing.Size(209, 23);
-            this.ProcessTestFaceButton.TabIndex = 9;
-            this.ProcessTestFaceButton.Text = "Process - Test Faces";
-            this.ProcessTestFaceButton.UseVisualStyleBackColor = true;
-            this.ProcessTestFaceButton.Click += new System.EventHandler(this.ProcessTestFaceButton_Click);
-            // 
-            // TestFacePrefixTextBox
-            // 
-            this.TestFacePrefixTextBox.Location = new System.Drawing.Point(121, 111);
-            this.TestFacePrefixTextBox.Name = "TestFacePrefixTextBox";
-            this.TestFacePrefixTextBox.Size = new System.Drawing.Size(94, 20);
-            this.TestFacePrefixTextBox.TabIndex = 16;
-            this.TestFacePrefixTextBox.Text = "cmu_";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 114);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(86, 13);
-            this.label3.TabIndex = 17;
-            this.label3.Text = "Test Face prefix:";
-            // 
-            // ProcessTestNotFacesButton
-            // 
-            this.ProcessTestNotFacesButton.Location = new System.Drawing.Point(6, 48);
-            this.ProcessTestNotFacesButton.Name = "ProcessTestNotFacesButton";
-            this.ProcessTestNotFacesButton.Size = new System.Drawing.Size(209, 23);
-            this.ProcessTestNotFacesButton.TabIndex = 10;
-            this.ProcessTestNotFacesButton.Text = "Process - Test Not Faces";
-            this.ProcessTestNotFacesButton.UseVisualStyleBackColor = true;
-            this.ProcessTestNotFacesButton.Click += new System.EventHandler(this.ProcessTestNotFacesButton_Click);
-            // 
-            // TestNotFacePrefixTextBox
-            // 
-            this.TestNotFacePrefixTextBox.Location = new System.Drawing.Point(121, 139);
-            this.TestNotFacePrefixTextBox.Name = "TestNotFacePrefixTextBox";
-            this.TestNotFacePrefixTextBox.Size = new System.Drawing.Size(94, 20);
-            this.TestNotFacePrefixTextBox.TabIndex = 18;
-            this.TestNotFacePrefixTextBox.Text = "cmu_";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 142);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(106, 13);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Test Not Face prefix:";
             // 
             // ProcessBothTestButton
             // 
@@ -624,35 +618,73 @@
             this.ProcessBothTestButton.UseVisualStyleBackColor = true;
             this.ProcessBothTestButton.Click += new System.EventHandler(this.ProcessBothTestButton_Click);
             // 
-            // label4
+            // TestNotFacePrefixTextBox
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 142);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(106, 13);
-            this.label4.TabIndex = 19;
-            this.label4.Text = "Test Not Face prefix:";
+            this.TestNotFacePrefixTextBox.Location = new System.Drawing.Point(121, 139);
+            this.TestNotFacePrefixTextBox.Name = "TestNotFacePrefixTextBox";
+            this.TestNotFacePrefixTextBox.Size = new System.Drawing.Size(94, 20);
+            this.TestNotFacePrefixTextBox.TabIndex = 18;
+            this.TestNotFacePrefixTextBox.Text = "cmu_";
+            // 
+            // ProcessTestNotFacesButton
+            // 
+            this.ProcessTestNotFacesButton.Location = new System.Drawing.Point(6, 48);
+            this.ProcessTestNotFacesButton.Name = "ProcessTestNotFacesButton";
+            this.ProcessTestNotFacesButton.Size = new System.Drawing.Size(209, 23);
+            this.ProcessTestNotFacesButton.TabIndex = 10;
+            this.ProcessTestNotFacesButton.Text = "Process - Test Not Faces";
+            this.ProcessTestNotFacesButton.UseVisualStyleBackColor = true;
+            this.ProcessTestNotFacesButton.Click += new System.EventHandler(this.ProcessTestNotFacesButton_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 114);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(86, 13);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "Test Face prefix:";
+            // 
+            // TestFacePrefixTextBox
+            // 
+            this.TestFacePrefixTextBox.Location = new System.Drawing.Point(121, 111);
+            this.TestFacePrefixTextBox.Name = "TestFacePrefixTextBox";
+            this.TestFacePrefixTextBox.Size = new System.Drawing.Size(94, 20);
+            this.TestFacePrefixTextBox.TabIndex = 16;
+            this.TestFacePrefixTextBox.Text = "cmu_";
+            // 
+            // ProcessTestFaceButton
+            // 
+            this.ProcessTestFaceButton.Location = new System.Drawing.Point(6, 19);
+            this.ProcessTestFaceButton.Name = "ProcessTestFaceButton";
+            this.ProcessTestFaceButton.Size = new System.Drawing.Size(209, 23);
+            this.ProcessTestFaceButton.TabIndex = 9;
+            this.ProcessTestFaceButton.Text = "Process - Test Faces";
+            this.ProcessTestFaceButton.UseVisualStyleBackColor = true;
+            this.ProcessTestFaceButton.Click += new System.EventHandler(this.ProcessTestFaceButton_Click);
             // 
             // TestingGroupBox
             // 
+            this.TestingGroupBox.Controls.Add(this.VerboseLoggingChkBx);
             this.TestingGroupBox.Controls.Add(this.DisplayAsRawRGBButton);
             this.TestingGroupBox.Controls.Add(this.PreviewOperatorButton);
             this.TestingGroupBox.Location = new System.Drawing.Point(235, 3);
             this.TestingGroupBox.Name = "TestingGroupBox";
-            this.TestingGroupBox.Size = new System.Drawing.Size(142, 82);
+            this.TestingGroupBox.Size = new System.Drawing.Size(142, 114);
             this.TestingGroupBox.TabIndex = 9;
             this.TestingGroupBox.TabStop = false;
             this.TestingGroupBox.Text = "Debug";
             // 
-            // PreviewOperatorButton
+            // VerboseLoggingChkBx
             // 
-            this.PreviewOperatorButton.Location = new System.Drawing.Point(9, 48);
-            this.PreviewOperatorButton.Name = "PreviewOperatorButton";
-            this.PreviewOperatorButton.Size = new System.Drawing.Size(119, 24);
-            this.PreviewOperatorButton.TabIndex = 5;
-            this.PreviewOperatorButton.Text = "Preview Operator";
-            this.PreviewOperatorButton.UseVisualStyleBackColor = true;
-            this.PreviewOperatorButton.Click += new System.EventHandler(this.PreviewOperatorButton_Click);
+            this.VerboseLoggingChkBx.AutoSize = true;
+            this.VerboseLoggingChkBx.Location = new System.Drawing.Point(11, 82);
+            this.VerboseLoggingChkBx.Name = "VerboseLoggingChkBx";
+            this.VerboseLoggingChkBx.Size = new System.Drawing.Size(100, 17);
+            this.VerboseLoggingChkBx.TabIndex = 18;
+            this.VerboseLoggingChkBx.Text = "Verbose Output";
+            this.VerboseLoggingChkBx.UseVisualStyleBackColor = true;
+            this.VerboseLoggingChkBx.CheckedChanged += new System.EventHandler(this.VerboseLoggingChkBx_CheckedChanged);
             // 
             // DisplayAsRawRGBButton
             // 
@@ -663,6 +695,16 @@
             this.DisplayAsRawRGBButton.Text = "Display as Raw RGB";
             this.DisplayAsRawRGBButton.UseVisualStyleBackColor = true;
             this.DisplayAsRawRGBButton.Click += new System.EventHandler(this.DisplayAsRawRGBButton_Click);
+            // 
+            // PreviewOperatorButton
+            // 
+            this.PreviewOperatorButton.Location = new System.Drawing.Point(9, 48);
+            this.PreviewOperatorButton.Name = "PreviewOperatorButton";
+            this.PreviewOperatorButton.Size = new System.Drawing.Size(119, 24);
+            this.PreviewOperatorButton.TabIndex = 5;
+            this.PreviewOperatorButton.Text = "Preview Operator";
+            this.PreviewOperatorButton.UseVisualStyleBackColor = true;
+            this.PreviewOperatorButton.Click += new System.EventHandler(this.PreviewOperatorButton_Click);
             // 
             // groupBox1
             // 
@@ -681,170 +723,40 @@
             this.groupBox1.Controls.Add(this.Prewitt3x3x4RadioButton);
             this.groupBox1.Controls.Add(this.Kirsch3x3x1RadioButton);
             this.groupBox1.Controls.Add(this.Sobel3x3x1RadioButton);
-            this.groupBox1.Location = new System.Drawing.Point(235, 91);
+            this.groupBox1.Location = new System.Drawing.Point(235, 122);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(142, 394);
+            this.groupBox1.Size = new System.Drawing.Size(142, 365);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Operators";
             // 
-            // Sobel3x3x1RadioButton
+            // Isotropic3x3x1RadioButton
             // 
-            this.Sobel3x3x1RadioButton.AutoSize = true;
-            this.Sobel3x3x1RadioButton.Location = new System.Drawing.Point(10, 161);
-            this.Sobel3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Sobel3x3x1RadioButton.Name = "Sobel3x3x1RadioButton";
-            this.Sobel3x3x1RadioButton.Size = new System.Drawing.Size(118, 17);
-            this.Sobel3x3x1RadioButton.TabIndex = 0;
-            this.Sobel3x3x1RadioButton.TabStop = true;
-            this.Sobel3x3x1RadioButton.Text = "Sobel 3x3 1xRotate";
-            this.Sobel3x3x1RadioButton.UseVisualStyleBackColor = true;
-            this.Sobel3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x1RadioButton_CheckedChanged);
+            this.Isotropic3x3x1RadioButton.AutoSize = true;
+            this.Isotropic3x3x1RadioButton.Location = new System.Drawing.Point(10, 293);
+            this.Isotropic3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Isotropic3x3x1RadioButton.Name = "Isotropic3x3x1RadioButton";
+            this.Isotropic3x3x1RadioButton.Size = new System.Drawing.Size(131, 17);
+            this.Isotropic3x3x1RadioButton.TabIndex = 17;
+            this.Isotropic3x3x1RadioButton.TabStop = true;
+            this.Isotropic3x3x1RadioButton.Text = "Isotropic 3x3 1xRotate";
+            this.Isotropic3x3x1RadioButton.UseVisualStyleBackColor = true;
+            this.Isotropic3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x1RadioButton_CheckedChanged);
             // 
-            // Kirsch3x3x1RadioButton
+            // Scharr3x3x1RadioButton
             // 
-            this.Kirsch3x3x1RadioButton.AutoSize = true;
-            this.Kirsch3x3x1RadioButton.Location = new System.Drawing.Point(10, 89);
-            this.Kirsch3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Kirsch3x3x1RadioButton.Name = "Kirsch3x3x1RadioButton";
-            this.Kirsch3x3x1RadioButton.Size = new System.Drawing.Size(118, 17);
-            this.Kirsch3x3x1RadioButton.TabIndex = 1;
-            this.Kirsch3x3x1RadioButton.TabStop = true;
-            this.Kirsch3x3x1RadioButton.Text = "Kirsch 3x3 1 Rotate";
-            this.Kirsch3x3x1RadioButton.UseVisualStyleBackColor = true;
-            this.Kirsch3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x1RadioButton_CheckedChanged);
-            // 
-            // Prewitt3x3x4RadioButton
-            // 
-            this.Prewitt3x3x4RadioButton.AutoSize = true;
-            this.Prewitt3x3x4RadioButton.Location = new System.Drawing.Point(10, 41);
-            this.Prewitt3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Prewitt3x3x4RadioButton.Name = "Prewitt3x3x4RadioButton";
-            this.Prewitt3x3x4RadioButton.Size = new System.Drawing.Size(123, 17);
-            this.Prewitt3x3x4RadioButton.TabIndex = 2;
-            this.Prewitt3x3x4RadioButton.TabStop = true;
-            this.Prewitt3x3x4RadioButton.Text = "Prewitt 3x3 4xRotate";
-            this.Prewitt3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Prewitt3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x4RadioButton_CheckedChanged);
-            // 
-            // Prewitt3x3x8RadioButton
-            // 
-            this.Prewitt3x3x8RadioButton.AutoSize = true;
-            this.Prewitt3x3x8RadioButton.Location = new System.Drawing.Point(10, 65);
-            this.Prewitt3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Prewitt3x3x8RadioButton.Name = "Prewitt3x3x8RadioButton";
-            this.Prewitt3x3x8RadioButton.Size = new System.Drawing.Size(123, 17);
-            this.Prewitt3x3x8RadioButton.TabIndex = 3;
-            this.Prewitt3x3x8RadioButton.TabStop = true;
-            this.Prewitt3x3x8RadioButton.Text = "Prewitt 3x3 8xRotate";
-            this.Prewitt3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Prewitt3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x8RadioButton_CheckedChanged);
-            // 
-            // Kirsch3x3x4RadioButton
-            // 
-            this.Kirsch3x3x4RadioButton.AutoSize = true;
-            this.Kirsch3x3x4RadioButton.Location = new System.Drawing.Point(10, 113);
-            this.Kirsch3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Kirsch3x3x4RadioButton.Name = "Kirsch3x3x4RadioButton";
-            this.Kirsch3x3x4RadioButton.Size = new System.Drawing.Size(120, 17);
-            this.Kirsch3x3x4RadioButton.TabIndex = 5;
-            this.Kirsch3x3x4RadioButton.TabStop = true;
-            this.Kirsch3x3x4RadioButton.Text = "Kirsch 3x3 4xRotate";
-            this.Kirsch3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Kirsch3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x4RadioButton_CheckedChanged);
-            // 
-            // Kirsch3x3x8RadioButton
-            // 
-            this.Kirsch3x3x8RadioButton.AutoSize = true;
-            this.Kirsch3x3x8RadioButton.Location = new System.Drawing.Point(10, 137);
-            this.Kirsch3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Kirsch3x3x8RadioButton.Name = "Kirsch3x3x8RadioButton";
-            this.Kirsch3x3x8RadioButton.Size = new System.Drawing.Size(120, 17);
-            this.Kirsch3x3x8RadioButton.TabIndex = 6;
-            this.Kirsch3x3x8RadioButton.TabStop = true;
-            this.Kirsch3x3x8RadioButton.Text = "Kirsch 3x3 8xRotate";
-            this.Kirsch3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Kirsch3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x8RadioButton_CheckedChanged);
-            // 
-            // Sobel3x3x4RadioButton
-            // 
-            this.Sobel3x3x4RadioButton.AutoSize = true;
-            this.Sobel3x3x4RadioButton.Location = new System.Drawing.Point(10, 185);
-            this.Sobel3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Sobel3x3x4RadioButton.Name = "Sobel3x3x4RadioButton";
-            this.Sobel3x3x4RadioButton.Size = new System.Drawing.Size(118, 17);
-            this.Sobel3x3x4RadioButton.TabIndex = 7;
-            this.Sobel3x3x4RadioButton.TabStop = true;
-            this.Sobel3x3x4RadioButton.Text = "Sobel 3x3 4xRotate";
-            this.Sobel3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Sobel3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x4RadioButton_CheckedChanged);
-            // 
-            // Sobel3x3x8RadioButton
-            // 
-            this.Sobel3x3x8RadioButton.AutoSize = true;
-            this.Sobel3x3x8RadioButton.Location = new System.Drawing.Point(10, 209);
-            this.Sobel3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Sobel3x3x8RadioButton.Name = "Sobel3x3x8RadioButton";
-            this.Sobel3x3x8RadioButton.Size = new System.Drawing.Size(118, 17);
-            this.Sobel3x3x8RadioButton.TabIndex = 8;
-            this.Sobel3x3x8RadioButton.TabStop = true;
-            this.Sobel3x3x8RadioButton.Text = "Sobel 3x3 8xRotate";
-            this.Sobel3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Sobel3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x8RadioButton_CheckedChanged);
-            // 
-            // Scharr3x3x4RadioButton
-            // 
-            this.Scharr3x3x4RadioButton.AutoSize = true;
-            this.Scharr3x3x4RadioButton.Location = new System.Drawing.Point(10, 257);
-            this.Scharr3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Scharr3x3x4RadioButton.Name = "Scharr3x3x4RadioButton";
-            this.Scharr3x3x4RadioButton.Size = new System.Drawing.Size(122, 17);
-            this.Scharr3x3x4RadioButton.TabIndex = 10;
-            this.Scharr3x3x4RadioButton.TabStop = true;
-            this.Scharr3x3x4RadioButton.Text = "Scharr 3x3 4xRotate";
-            this.Scharr3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Scharr3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x4RadioButton_CheckedChanged);
-            // 
-            // Scharr3x3x8RadioButton
-            // 
-            this.Scharr3x3x8RadioButton.AutoSize = true;
-            this.Scharr3x3x8RadioButton.Location = new System.Drawing.Point(10, 281);
-            this.Scharr3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Scharr3x3x8RadioButton.Name = "Scharr3x3x8RadioButton";
-            this.Scharr3x3x8RadioButton.Size = new System.Drawing.Size(122, 17);
-            this.Scharr3x3x8RadioButton.TabIndex = 11;
-            this.Scharr3x3x8RadioButton.TabStop = true;
-            this.Scharr3x3x8RadioButton.Text = "Scharr 3x3 8xRotate";
-            this.Scharr3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Scharr3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x8RadioButton_CheckedChanged);
-            // 
-            // Isotropic3x3x4RadioButton
-            // 
-            this.Isotropic3x3x4RadioButton.AutoSize = true;
-            this.Isotropic3x3x4RadioButton.Location = new System.Drawing.Point(10, 329);
-            this.Isotropic3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Isotropic3x3x4RadioButton.Name = "Isotropic3x3x4RadioButton";
-            this.Isotropic3x3x4RadioButton.Size = new System.Drawing.Size(131, 17);
-            this.Isotropic3x3x4RadioButton.TabIndex = 13;
-            this.Isotropic3x3x4RadioButton.TabStop = true;
-            this.Isotropic3x3x4RadioButton.Text = "Isotropic 3x3 4xRotate";
-            this.Isotropic3x3x4RadioButton.UseVisualStyleBackColor = true;
-            this.Isotropic3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x4RadioButton_CheckedChanged);
-            // 
-            // Isotropic3x3x8RadioButton
-            // 
-            this.Isotropic3x3x8RadioButton.AutoSize = true;
-            this.Isotropic3x3x8RadioButton.Location = new System.Drawing.Point(10, 353);
-            this.Isotropic3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Isotropic3x3x8RadioButton.Name = "Isotropic3x3x8RadioButton";
-            this.Isotropic3x3x8RadioButton.Size = new System.Drawing.Size(131, 17);
-            this.Isotropic3x3x8RadioButton.TabIndex = 14;
-            this.Isotropic3x3x8RadioButton.TabStop = true;
-            this.Isotropic3x3x8RadioButton.Text = "Isotropic 3x3 8xRotate";
-            this.Isotropic3x3x8RadioButton.UseVisualStyleBackColor = true;
-            this.Isotropic3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x8RadioButton_CheckedChanged);
+            this.Scharr3x3x1RadioButton.AutoSize = true;
+            this.Scharr3x3x1RadioButton.Location = new System.Drawing.Point(10, 224);
+            this.Scharr3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Scharr3x3x1RadioButton.Name = "Scharr3x3x1RadioButton";
+            this.Scharr3x3x1RadioButton.Size = new System.Drawing.Size(122, 17);
+            this.Scharr3x3x1RadioButton.TabIndex = 16;
+            this.Scharr3x3x1RadioButton.TabStop = true;
+            this.Scharr3x3x1RadioButton.Text = "Scharr 3x3 1xRotate";
+            this.Scharr3x3x1RadioButton.UseVisualStyleBackColor = true;
+            this.Scharr3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x1RadioButton_CheckedChanged);
             // 
             // Prewitt3x3x1RadioButton
             // 
@@ -859,31 +771,161 @@
             this.Prewitt3x3x1RadioButton.UseVisualStyleBackColor = true;
             this.Prewitt3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x1RadioButton_CheckedChanged);
             // 
-            // Scharr3x3x1RadioButton
+            // Isotropic3x3x8RadioButton
             // 
-            this.Scharr3x3x1RadioButton.AutoSize = true;
-            this.Scharr3x3x1RadioButton.Location = new System.Drawing.Point(10, 233);
-            this.Scharr3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Scharr3x3x1RadioButton.Name = "Scharr3x3x1RadioButton";
-            this.Scharr3x3x1RadioButton.Size = new System.Drawing.Size(122, 17);
-            this.Scharr3x3x1RadioButton.TabIndex = 16;
-            this.Scharr3x3x1RadioButton.TabStop = true;
-            this.Scharr3x3x1RadioButton.Text = "Scharr 3x3 1xRotate";
-            this.Scharr3x3x1RadioButton.UseVisualStyleBackColor = true;
-            this.Scharr3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x1RadioButton_CheckedChanged);
+            this.Isotropic3x3x8RadioButton.AutoSize = true;
+            this.Isotropic3x3x8RadioButton.Location = new System.Drawing.Point(10, 339);
+            this.Isotropic3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Isotropic3x3x8RadioButton.Name = "Isotropic3x3x8RadioButton";
+            this.Isotropic3x3x8RadioButton.Size = new System.Drawing.Size(131, 17);
+            this.Isotropic3x3x8RadioButton.TabIndex = 14;
+            this.Isotropic3x3x8RadioButton.TabStop = true;
+            this.Isotropic3x3x8RadioButton.Text = "Isotropic 3x3 8xRotate";
+            this.Isotropic3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Isotropic3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x8RadioButton_CheckedChanged);
             // 
-            // Isotropic3x3x1RadioButton
+            // Isotropic3x3x4RadioButton
             // 
-            this.Isotropic3x3x1RadioButton.AutoSize = true;
-            this.Isotropic3x3x1RadioButton.Location = new System.Drawing.Point(10, 305);
-            this.Isotropic3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
-            this.Isotropic3x3x1RadioButton.Name = "Isotropic3x3x1RadioButton";
-            this.Isotropic3x3x1RadioButton.Size = new System.Drawing.Size(131, 17);
-            this.Isotropic3x3x1RadioButton.TabIndex = 17;
-            this.Isotropic3x3x1RadioButton.TabStop = true;
-            this.Isotropic3x3x1RadioButton.Text = "Isotropic 3x3 1xRotate";
-            this.Isotropic3x3x1RadioButton.UseVisualStyleBackColor = true;
-            this.Isotropic3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x1RadioButton_CheckedChanged);
+            this.Isotropic3x3x4RadioButton.AutoSize = true;
+            this.Isotropic3x3x4RadioButton.Location = new System.Drawing.Point(10, 316);
+            this.Isotropic3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Isotropic3x3x4RadioButton.Name = "Isotropic3x3x4RadioButton";
+            this.Isotropic3x3x4RadioButton.Size = new System.Drawing.Size(131, 17);
+            this.Isotropic3x3x4RadioButton.TabIndex = 13;
+            this.Isotropic3x3x4RadioButton.TabStop = true;
+            this.Isotropic3x3x4RadioButton.Text = "Isotropic 3x3 4xRotate";
+            this.Isotropic3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Isotropic3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Isotropic3x3x4RadioButton_CheckedChanged);
+            // 
+            // Scharr3x3x8RadioButton
+            // 
+            this.Scharr3x3x8RadioButton.AutoSize = true;
+            this.Scharr3x3x8RadioButton.Location = new System.Drawing.Point(10, 270);
+            this.Scharr3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Scharr3x3x8RadioButton.Name = "Scharr3x3x8RadioButton";
+            this.Scharr3x3x8RadioButton.Size = new System.Drawing.Size(122, 17);
+            this.Scharr3x3x8RadioButton.TabIndex = 11;
+            this.Scharr3x3x8RadioButton.TabStop = true;
+            this.Scharr3x3x8RadioButton.Text = "Scharr 3x3 8xRotate";
+            this.Scharr3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Scharr3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x8RadioButton_CheckedChanged);
+            // 
+            // Scharr3x3x4RadioButton
+            // 
+            this.Scharr3x3x4RadioButton.AutoSize = true;
+            this.Scharr3x3x4RadioButton.Location = new System.Drawing.Point(10, 247);
+            this.Scharr3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Scharr3x3x4RadioButton.Name = "Scharr3x3x4RadioButton";
+            this.Scharr3x3x4RadioButton.Size = new System.Drawing.Size(122, 17);
+            this.Scharr3x3x4RadioButton.TabIndex = 10;
+            this.Scharr3x3x4RadioButton.TabStop = true;
+            this.Scharr3x3x4RadioButton.Text = "Scharr 3x3 4xRotate";
+            this.Scharr3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Scharr3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Scharr3x3x4RadioButton_CheckedChanged);
+            // 
+            // Sobel3x3x8RadioButton
+            // 
+            this.Sobel3x3x8RadioButton.AutoSize = true;
+            this.Sobel3x3x8RadioButton.Location = new System.Drawing.Point(10, 201);
+            this.Sobel3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Sobel3x3x8RadioButton.Name = "Sobel3x3x8RadioButton";
+            this.Sobel3x3x8RadioButton.Size = new System.Drawing.Size(118, 17);
+            this.Sobel3x3x8RadioButton.TabIndex = 8;
+            this.Sobel3x3x8RadioButton.TabStop = true;
+            this.Sobel3x3x8RadioButton.Text = "Sobel 3x3 8xRotate";
+            this.Sobel3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Sobel3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x8RadioButton_CheckedChanged);
+            // 
+            // Sobel3x3x4RadioButton
+            // 
+            this.Sobel3x3x4RadioButton.AutoSize = true;
+            this.Sobel3x3x4RadioButton.Location = new System.Drawing.Point(10, 178);
+            this.Sobel3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Sobel3x3x4RadioButton.Name = "Sobel3x3x4RadioButton";
+            this.Sobel3x3x4RadioButton.Size = new System.Drawing.Size(118, 17);
+            this.Sobel3x3x4RadioButton.TabIndex = 7;
+            this.Sobel3x3x4RadioButton.TabStop = true;
+            this.Sobel3x3x4RadioButton.Text = "Sobel 3x3 4xRotate";
+            this.Sobel3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Sobel3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x4RadioButton_CheckedChanged);
+            // 
+            // Kirsch3x3x8RadioButton
+            // 
+            this.Kirsch3x3x8RadioButton.AutoSize = true;
+            this.Kirsch3x3x8RadioButton.Location = new System.Drawing.Point(10, 132);
+            this.Kirsch3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Kirsch3x3x8RadioButton.Name = "Kirsch3x3x8RadioButton";
+            this.Kirsch3x3x8RadioButton.Size = new System.Drawing.Size(120, 17);
+            this.Kirsch3x3x8RadioButton.TabIndex = 6;
+            this.Kirsch3x3x8RadioButton.TabStop = true;
+            this.Kirsch3x3x8RadioButton.Text = "Kirsch 3x3 8xRotate";
+            this.Kirsch3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Kirsch3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x8RadioButton_CheckedChanged);
+            // 
+            // Kirsch3x3x4RadioButton
+            // 
+            this.Kirsch3x3x4RadioButton.AutoSize = true;
+            this.Kirsch3x3x4RadioButton.Location = new System.Drawing.Point(10, 109);
+            this.Kirsch3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Kirsch3x3x4RadioButton.Name = "Kirsch3x3x4RadioButton";
+            this.Kirsch3x3x4RadioButton.Size = new System.Drawing.Size(120, 17);
+            this.Kirsch3x3x4RadioButton.TabIndex = 5;
+            this.Kirsch3x3x4RadioButton.TabStop = true;
+            this.Kirsch3x3x4RadioButton.Text = "Kirsch 3x3 4xRotate";
+            this.Kirsch3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Kirsch3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x4RadioButton_CheckedChanged);
+            // 
+            // Prewitt3x3x8RadioButton
+            // 
+            this.Prewitt3x3x8RadioButton.AutoSize = true;
+            this.Prewitt3x3x8RadioButton.Location = new System.Drawing.Point(10, 63);
+            this.Prewitt3x3x8RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Prewitt3x3x8RadioButton.Name = "Prewitt3x3x8RadioButton";
+            this.Prewitt3x3x8RadioButton.Size = new System.Drawing.Size(123, 17);
+            this.Prewitt3x3x8RadioButton.TabIndex = 3;
+            this.Prewitt3x3x8RadioButton.TabStop = true;
+            this.Prewitt3x3x8RadioButton.Text = "Prewitt 3x3 8xRotate";
+            this.Prewitt3x3x8RadioButton.UseVisualStyleBackColor = true;
+            this.Prewitt3x3x8RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x8RadioButton_CheckedChanged);
+            // 
+            // Prewitt3x3x4RadioButton
+            // 
+            this.Prewitt3x3x4RadioButton.AutoSize = true;
+            this.Prewitt3x3x4RadioButton.Location = new System.Drawing.Point(10, 40);
+            this.Prewitt3x3x4RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Prewitt3x3x4RadioButton.Name = "Prewitt3x3x4RadioButton";
+            this.Prewitt3x3x4RadioButton.Size = new System.Drawing.Size(123, 17);
+            this.Prewitt3x3x4RadioButton.TabIndex = 2;
+            this.Prewitt3x3x4RadioButton.TabStop = true;
+            this.Prewitt3x3x4RadioButton.Text = "Prewitt 3x3 4xRotate";
+            this.Prewitt3x3x4RadioButton.UseVisualStyleBackColor = true;
+            this.Prewitt3x3x4RadioButton.CheckedChanged += new System.EventHandler(this.Prewitt3x3x4RadioButton_CheckedChanged);
+            // 
+            // Kirsch3x3x1RadioButton
+            // 
+            this.Kirsch3x3x1RadioButton.AutoSize = true;
+            this.Kirsch3x3x1RadioButton.Location = new System.Drawing.Point(10, 86);
+            this.Kirsch3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Kirsch3x3x1RadioButton.Name = "Kirsch3x3x1RadioButton";
+            this.Kirsch3x3x1RadioButton.Size = new System.Drawing.Size(118, 17);
+            this.Kirsch3x3x1RadioButton.TabIndex = 1;
+            this.Kirsch3x3x1RadioButton.TabStop = true;
+            this.Kirsch3x3x1RadioButton.Text = "Kirsch 3x3 1 Rotate";
+            this.Kirsch3x3x1RadioButton.UseVisualStyleBackColor = true;
+            this.Kirsch3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Kirsch3x3x1RadioButton_CheckedChanged);
+            // 
+            // Sobel3x3x1RadioButton
+            // 
+            this.Sobel3x3x1RadioButton.AutoSize = true;
+            this.Sobel3x3x1RadioButton.Location = new System.Drawing.Point(10, 155);
+            this.Sobel3x3x1RadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.Sobel3x3x1RadioButton.Name = "Sobel3x3x1RadioButton";
+            this.Sobel3x3x1RadioButton.Size = new System.Drawing.Size(118, 17);
+            this.Sobel3x3x1RadioButton.TabIndex = 0;
+            this.Sobel3x3x1RadioButton.TabStop = true;
+            this.Sobel3x3x1RadioButton.Text = "Sobel 3x3 1xRotate";
+            this.Sobel3x3x1RadioButton.UseVisualStyleBackColor = true;
+            this.Sobel3x3x1RadioButton.CheckedChanged += new System.EventHandler(this.Sobel3x3x1RadioButton_CheckedChanged);
             // 
             // groupBox6
             // 
@@ -894,48 +936,30 @@
             this.groupBox6.Controls.Add(this.ProcessTrainFacesButton);
             this.groupBox6.Controls.Add(this.TrainFacePrefixTextBox);
             this.groupBox6.Controls.Add(this.ProcessTrainNotFacesButton);
-            this.groupBox6.Location = new System.Drawing.Point(8, 146);
+            this.groupBox6.Location = new System.Drawing.Point(8, 122);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(223, 168);
             this.groupBox6.TabIndex = 14;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Train Image Set";
             // 
-            // ProcessTrainNotFacesButton
+            // label1
             // 
-            this.ProcessTrainNotFacesButton.Location = new System.Drawing.Point(6, 48);
-            this.ProcessTrainNotFacesButton.Name = "ProcessTrainNotFacesButton";
-            this.ProcessTrainNotFacesButton.Size = new System.Drawing.Size(211, 23);
-            this.ProcessTrainNotFacesButton.TabIndex = 8;
-            this.ProcessTrainNotFacesButton.Text = "Process - Train Not Faces";
-            this.ProcessTrainNotFacesButton.UseVisualStyleBackColor = true;
-            this.ProcessTrainNotFacesButton.Click += new System.EventHandler(this.ProcessTrainNotFacesButton_Click);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 111);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Train Face prefix:";
             // 
-            // TrainFacePrefixTextBox
+            // label2
             // 
-            this.TrainFacePrefixTextBox.Location = new System.Drawing.Point(123, 108);
-            this.TrainFacePrefixTextBox.Name = "TrainFacePrefixTextBox";
-            this.TrainFacePrefixTextBox.Size = new System.Drawing.Size(94, 20);
-            this.TrainFacePrefixTextBox.TabIndex = 4;
-            this.TrainFacePrefixTextBox.Text = "face";
-            // 
-            // ProcessTrainFacesButton
-            // 
-            this.ProcessTrainFacesButton.Location = new System.Drawing.Point(6, 19);
-            this.ProcessTrainFacesButton.Name = "ProcessTrainFacesButton";
-            this.ProcessTrainFacesButton.Size = new System.Drawing.Size(211, 23);
-            this.ProcessTrainFacesButton.TabIndex = 7;
-            this.ProcessTrainFacesButton.Text = "Process - Train Faces";
-            this.ProcessTrainFacesButton.UseVisualStyleBackColor = true;
-            this.ProcessTrainFacesButton.Click += new System.EventHandler(this.ProcessTrainFacesButton_Click);
-            // 
-            // TrainNotFacePrefixTextBox
-            // 
-            this.TrainNotFacePrefixTextBox.Location = new System.Drawing.Point(123, 137);
-            this.TrainNotFacePrefixTextBox.Name = "TrainNotFacePrefixTextBox";
-            this.TrainNotFacePrefixTextBox.Size = new System.Drawing.Size(94, 20);
-            this.TrainNotFacePrefixTextBox.TabIndex = 14;
-            this.TrainNotFacePrefixTextBox.Text = "cmu_";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 140);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(109, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Train Not Face prefix:";
             // 
             // ProcessBothTrain
             // 
@@ -947,26 +971,45 @@
             this.ProcessBothTrain.UseVisualStyleBackColor = true;
             this.ProcessBothTrain.Click += new System.EventHandler(this.ProcessTrainFaceBoth_Click);
             // 
-            // label2
+            // TrainNotFacePrefixTextBox
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 140);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 13);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Train Not Face prefix:";
+            this.TrainNotFacePrefixTextBox.Location = new System.Drawing.Point(123, 137);
+            this.TrainNotFacePrefixTextBox.Name = "TrainNotFacePrefixTextBox";
+            this.TrainNotFacePrefixTextBox.Size = new System.Drawing.Size(94, 20);
+            this.TrainNotFacePrefixTextBox.TabIndex = 14;
+            this.TrainNotFacePrefixTextBox.Text = "cmu_";
             // 
-            // label1
+            // ProcessTrainFacesButton
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 111);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "Train Face prefix:";
+            this.ProcessTrainFacesButton.Location = new System.Drawing.Point(6, 19);
+            this.ProcessTrainFacesButton.Name = "ProcessTrainFacesButton";
+            this.ProcessTrainFacesButton.Size = new System.Drawing.Size(211, 23);
+            this.ProcessTrainFacesButton.TabIndex = 7;
+            this.ProcessTrainFacesButton.Text = "Process - Train Faces";
+            this.ProcessTrainFacesButton.UseVisualStyleBackColor = true;
+            this.ProcessTrainFacesButton.Click += new System.EventHandler(this.ProcessTrainFacesButton_Click);
+            // 
+            // TrainFacePrefixTextBox
+            // 
+            this.TrainFacePrefixTextBox.Location = new System.Drawing.Point(123, 108);
+            this.TrainFacePrefixTextBox.Name = "TrainFacePrefixTextBox";
+            this.TrainFacePrefixTextBox.Size = new System.Drawing.Size(94, 20);
+            this.TrainFacePrefixTextBox.TabIndex = 4;
+            this.TrainFacePrefixTextBox.Text = "face";
+            // 
+            // ProcessTrainNotFacesButton
+            // 
+            this.ProcessTrainNotFacesButton.Location = new System.Drawing.Point(6, 48);
+            this.ProcessTrainNotFacesButton.Name = "ProcessTrainNotFacesButton";
+            this.ProcessTrainNotFacesButton.Size = new System.Drawing.Size(211, 23);
+            this.ProcessTrainNotFacesButton.TabIndex = 8;
+            this.ProcessTrainNotFacesButton.Text = "Process - Train Not Faces";
+            this.ProcessTrainNotFacesButton.UseVisualStyleBackColor = true;
+            this.ProcessTrainNotFacesButton.Click += new System.EventHandler(this.ProcessTrainNotFacesButton_Click);
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.EdgedPictureBox);
             this.groupBox4.Controls.Add(this.PreviewPictureBox);
             this.groupBox4.Location = new System.Drawing.Point(8, 492);
             this.groupBox4.Name = "groupBox4";
@@ -974,6 +1017,16 @@
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Image Preview";
+            // 
+            // EdgedPictureBox
+            // 
+            this.EdgedPictureBox.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.EdgedPictureBox.Location = new System.Drawing.Point(20, 23);
+            this.EdgedPictureBox.Name = "EdgedPictureBox";
+            this.EdgedPictureBox.Size = new System.Drawing.Size(108, 103);
+            this.EdgedPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.EdgedPictureBox.TabIndex = 4;
+            this.EdgedPictureBox.TabStop = false;
             // 
             // PreviewPictureBox
             // 
@@ -998,57 +1051,27 @@
             this.panel1.Size = new System.Drawing.Size(386, 827);
             this.panel1.TabIndex = 1;
             // 
-            // RestoreDefaultsBtn
-            // 
-            this.RestoreDefaultsBtn.Location = new System.Drawing.Point(7, 48);
-            this.RestoreDefaultsBtn.Name = "RestoreDefaultsBtn";
-            this.RestoreDefaultsBtn.Size = new System.Drawing.Size(211, 23);
-            this.RestoreDefaultsBtn.TabIndex = 9;
-            this.RestoreDefaultsBtn.Text = "Restore Defaults";
-            this.RestoreDefaultsBtn.UseVisualStyleBackColor = true;
-            this.RestoreDefaultsBtn.Click += new System.EventHandler(this.RestoreDefaultsBtn_Click);
-            // 
-            // RenameAllImagesBtn
-            // 
-            this.RenameAllImagesBtn.Location = new System.Drawing.Point(14, 180);
-            this.RenameAllImagesBtn.Name = "RenameAllImagesBtn";
-            this.RenameAllImagesBtn.Size = new System.Drawing.Size(149, 23);
-            this.RenameAllImagesBtn.TabIndex = 32;
-            this.RenameAllImagesBtn.Text = "Rename All";
-            this.RenameAllImagesBtn.UseVisualStyleBackColor = true;
-            this.RenameAllImagesBtn.Click += new System.EventHandler(this.RenameAllImagesBtn_Click);
-            // 
             // ImgProgressBar
             // 
-            this.ImgProgressBar.Location = new System.Drawing.Point(13, 848);
+            this.ImgProgressBar.Location = new System.Drawing.Point(12, 863);
             this.ImgProgressBar.Name = "ImgProgressBar";
-            this.ImgProgressBar.Size = new System.Drawing.Size(1383, 23);
+            this.ImgProgressBar.Size = new System.Drawing.Size(1383, 13);
             this.ImgProgressBar.TabIndex = 16;
             // 
             // PercentageComplete
             // 
             this.PercentageComplete.AutoSize = true;
-            this.PercentageComplete.Location = new System.Drawing.Point(1417, 852);
+            this.PercentageComplete.Location = new System.Drawing.Point(1417, 862);
             this.PercentageComplete.Name = "PercentageComplete";
             this.PercentageComplete.Size = new System.Drawing.Size(21, 13);
             this.PercentageComplete.TabIndex = 17;
             this.PercentageComplete.Text = "0%";
             // 
-            // StopButton
-            // 
-            this.StopButton.Location = new System.Drawing.Point(7, 105);
-            this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(209, 23);
-            this.StopButton.TabIndex = 10;
-            this.StopButton.Text = "Stop";
-            this.StopButton.UseVisualStyleBackColor = true;
-            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1481, 870);
+            this.ClientSize = new System.Drawing.Size(1481, 880);
             this.Controls.Add(this.PercentageComplete);
             this.Controls.Add(this.ImgProgressBar);
             this.Controls.Add(this.groupBox3);
@@ -1060,6 +1083,7 @@
             this.Name = "Form1";
             this.Text = "Image Processor Pro";
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -1072,11 +1096,13 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.TestingGroupBox.ResumeLayout(false);
+            this.TestingGroupBox.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.EdgedPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPictureBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1127,7 +1153,6 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button ExitButton;
-        private System.Windows.Forms.Button ProcessAllButton;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button ProcessBothTestButton;
@@ -1167,10 +1192,13 @@
         private System.Windows.Forms.PictureBox PreviewPictureBox;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button RestoreDefaultsBtn;
-        private System.Windows.Forms.Button RenameAllImagesBtn;
         private System.Windows.Forms.ProgressBar ImgProgressBar;
         private System.Windows.Forms.Label PercentageComplete;
         private System.Windows.Forms.Button StopButton;
+        private System.Windows.Forms.PictureBox EdgedPictureBox;
+        private System.Windows.Forms.CheckBox VerboseLoggingChkBx;
+        private System.Windows.Forms.Label CurrentStatusLabel;
+        private System.Windows.Forms.Label label13;
     }
 }
 

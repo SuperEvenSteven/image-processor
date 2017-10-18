@@ -9,9 +9,12 @@ namespace ImageProcessor {
 
         public static double[,,] Prewitt3x3x1 {
             get {
-                double[,,] baseKernel = new double[,,] { { {  -1,  0,  1,  },
-                                                         {        -1,  0,  1,  },
-                                                         {        -1,  0,  1,  }, } };
+                double[,,] baseKernel = new double[,,] { {   {  -1,  0,  1,  }, // X
+                                                             {  -1,  0,  1,  },
+                                                             {  -1,  0,  1,  }, },
+                                                         {   {  -1, -2, -1,  }, // Y
+                                                             {   0,  0,  0,  },
+                                                             {   1,  2,  1,  }, }};
                 return baseKernel;
             }
         }

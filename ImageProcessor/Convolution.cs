@@ -28,6 +28,7 @@ namespace ImageProcessor {
         /// </summary>
 
 
+        // TODO - auto-generate this
         private static readonly int[] gaps = new int[7] { 0, 3, 6, 8, 10, 13, 16 };
 
         /// <summary>
@@ -38,9 +39,9 @@ namespace ImageProcessor {
         /// <param name="factor"></param>
         /// <param name="bias"></param>
         /// <returns></returns>
-        public static Bitmap ConvolutionFilter(this Bitmap sourceBitmap, double[,,] filterMatrix, TextBox tb, bool show) {
-            byte[] resultBuffer = ConvolutionFilterAsBytes(sourceBitmap, filterMatrix, tb, show);
-            Bitmap resultBitmap = new Bitmap(7, 7);
+        public static Bitmap ConvolutionFilter(this Bitmap sourceBitmap, int numOfPixels, double[,,] filterMatrix) {
+            byte[] resultBuffer = ConvolutionFilterAsBytes(sourceBitmap, numOfPixels, filterMatrix);
+            Bitmap resultBitmap = new Bitmap(numOfPixels, numOfPixels);
 
             BitmapData resultData = resultBitmap.LockBits(new Rectangle(0, 0, resultBitmap.Width, resultBitmap.Height),
                 ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
@@ -61,11 +62,11 @@ namespace ImageProcessor {
         /// <param name="factor"></param>
         /// <param name="bias"></param>
         /// <returns></returns>
-        public static byte[] ConvolutionFilterAsBytes(Bitmap sourceBitmap, double[,,] filterMatrix, TextBox tb, bool show) {
+        public static byte[] ConvolutionFilterAsBytes(Bitmap sourceBitmap, int numOfPixels, double[,,] filterMatrix) {
 
-            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, 7, 7), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-            byte[] pixelBuffer = new byte[sourceData.Stride * 7];
-            byte[] resultBuffer = new byte[sourceData.Stride * 7];
+            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, numOfPixels, numOfPixels), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            byte[] pixelBuffer = new byte[sourceData.Stride * numOfPixels];
+            byte[] resultBuffer = new byte[sourceData.Stride * numOfPixels];
 
             Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
             sourceBitmap.UnlockBits(sourceData);
@@ -73,36 +74,34 @@ namespace ImageProcessor {
             int byteOffset = 0;
             int retv = 0;
 
-            for (int yy = 0; yy < 7; yy++) {
-                for (int xx = 0; xx < 7; xx++) {
-                    retv = ComputeOperator(sourceBitmap, filterMatrix, gaps[xx], gaps[yy], tb, show);
+            for (int yy = 0; yy < numOfPixels; yy++) {
+                for (int xx = 0; xx < numOfPixels; xx++) {
+                    retv = ComputeOperator(sourceBitmap, filterMatrix, gaps[xx], gaps[yy]);
                     resultBuffer[byteOffset] = (byte)retv;
                     resultBuffer[byteOffset + 1] = 0;
                     resultBuffer[byteOffset + 2] = 0;
                     resultBuffer[byteOffset + 3] = 255;
+                    byteOffset += 4; //  
                 }
             }
             return resultBuffer;
         }
 
-        public static string ConvolutionFilterAsString(Bitmap sourceBitmap, double[,,] operators, TextBox tb, bool show) {
+        public static string ConvolutionFilterAsString(Bitmap sourceBitmap, int numOfPixels, double[,,] operators) {
 
-            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, 7, 7), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, numOfPixels, numOfPixels), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             byte[] pixelBuffer = new byte[sourceData.Stride * 7];
-            byte[] resultBuffer = new byte[sourceData.Stride * 7];
 
             Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
             sourceBitmap.UnlockBits(sourceData);
 
-            int filterWidth = operators.GetLength(1);
             string retv = "";
-            int bytev = 0;
+            int computedVal = 0;
 
-            for (int yy = 0; yy < 7; yy++) {
-                for (int xx = 0; xx < 7; xx++) {
-                    bytev = ComputeOperator(sourceBitmap, operators, gaps[xx], gaps[yy], tb, show);
-                    if (show) tb.AppendText(retv + " ");
-                    retv += " " + bytev;
+            for (int yy = 0; yy < numOfPixels; yy++) {
+                for (int xx = 0; xx < numOfPixels; xx++) {
+                    computedVal = ComputeOperator(sourceBitmap, operators, gaps[xx], gaps[yy]);
+                    retv += computedVal + ",";
                 }
             }
 
@@ -114,7 +113,7 @@ namespace ImageProcessor {
         /// as a single paramter for a NN to train with.
         /// </summary>
         /// <returns></returns>
-        private static int ComputeOperator(Bitmap bmp, double[,,] operators, int xOffset, int yOffset, TextBox tb, bool show) {
+        private static int ComputeOperator(Bitmap bmp, double[,,] operators, int xOffset, int yOffset) {
 
             // holds the rotated operators and their calculated value of the pixel
             var work = new List<Tuple<int[,], int[,]>>();
@@ -143,12 +142,12 @@ namespace ImageProcessor {
 
             // list each pixel to be multiplied as a 3x3 matrix
             work.ForEach(t => {
-                if (show) tb.AppendText(ThreebythreeToString(t.Item2, "sTemp"));
+                Form1.Instance.AppendVerboseText(ThreebythreeToString(t.Item2, "sTemp"));
             });
 
             // list each operator as a 3x3 matrix
             work.ForEach(t => {
-                if (show) tb.AppendText(ThreebythreeToString(t.Item1, "Operator"));
+                Form1.Instance.AppendVerboseText(ThreebythreeToString(t.Item1, "Operator"));
             });
 
             var multiplied = new List<int[,]>();
@@ -159,19 +158,19 @@ namespace ImageProcessor {
 
             // display the resultant 3x3 pixel matrix after the 3x3 operator has multiplied against it
             multiplied.ForEach(pixelMatrx => {
-                if (show) tb.AppendText(ThreebythreeToString(pixelMatrx, "sTemp"));
+                Form1.Instance.AppendVerboseText(ThreebythreeToString(pixelMatrx, "sTemp"));
             });
 
             // now that the pixel matrices have been multiplied, sum each one up
             int mathOperator = 0;
             multiplied.ForEach(pixelMatrx => {
                 var sum = ThreeBythreeSum(pixelMatrx);
-                if (show) tb.AppendText("sum=" + sum.ToString() + " ");
+                Form1.Instance.AppendVerboseText("sum=" + sum.ToString() + " ");
                 mathOperator = Math.Abs(mathOperator) + Math.Abs(sum);
             });
 
-            if (show) tb.AppendText("Sum of operators=" + mathOperator.ToString());
-            if (show) tb.AppendText("\r\n  .........................................  \r\n");
+            Form1.Instance.AppendVerboseText("Sum of operators=" + mathOperator.ToString());
+            Form1.Instance.AppendVerboseText("\r\n  .........................................  \r\n");
             return mathOperator;
         }
 
