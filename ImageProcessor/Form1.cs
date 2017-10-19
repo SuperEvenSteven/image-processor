@@ -32,7 +32,14 @@ namespace ImageProcessor {
             [Description("Test face image set")]
             TestFace,
             [Description("Test not face image set")]
-            TestNotFace
+            TestNotFace,
+            [Description("Labeled Faces in the Wild set")]
+            LfwFace
+        }
+
+        public enum ImageType {
+            NotFace,
+            Face
         }
 
         #region Constants
@@ -40,6 +47,7 @@ namespace ImageProcessor {
         private const int trainNotFaceFileCount = 4548;
         private const int testFaceFileCount = 472;
         private const int testNotFaceFileCount = 23573;
+        private const int lfwFaceCount = 13223;
         private const int totalFileCount = 31020;
         #endregion
 
@@ -48,13 +56,16 @@ namespace ImageProcessor {
         private string dirTestNotFaceBmp = @"C:\Temp\IPP\FaceData\TestNotFaceBmp\";
         private string dirTrainFaceBmp = @"C:\Temp\IPP\FaceData\TrainFaceBmp\";
         private string dirTrainNotFaceBmp = @"C:\Temp\IPP\FaceData\TrainNotFaceBmp\";
+        private string dirLfwFaceBmp = @"C:\Temp\IPP\FaceData\LfwFacesBmp\";
         private string dirNew = @"C:\Temp\IPP\FaceData\Both\";
 
         //technically a filter since it's 2 or more operators
         int widthHeightSize = 7;
         bool verboseOutput = false;
         double[,,] selectedOperator;
+        private long startTimeMs = 0;
         private int filesProcessed = 0;
+        private bool showLivePreview = true;
         private int totalFilesToProcess = 0;
         private List<CancellationTokenSource> cancelTokenSources = new List<CancellationTokenSource>();
 
@@ -63,6 +74,9 @@ namespace ImageProcessor {
         public Form1() {
             InitializeComponent();
             Form1.Instance = this;
+            //load the combobox
+            OperatorComboBox.DataSource = Enum.GetValues(typeof(OperatorNames));
+            //OperatorComboBox.SelectedValue = (int)OperatorNames.Sobel3x3x1;
         }
 
         #region Debug Button Clicks
@@ -146,7 +160,7 @@ namespace ImageProcessor {
             if (!TrainFacePrefixTextBox.IsEmpty("Train face prefix,")) {
                 ResetProgress(trainFaceFileCount);
                 var prefix = TrainFacePrefixTextBox.Text;
-                ProcessDirAsync(dirTrainFaceBmp, prefix, "D5", 1, trainFaceFileCount, "trainDataFace.csv", 1);
+                ProcessDirAsync(dirTrainFaceBmp, "trainDataFace.csv", ImageType.Face, true, prefix, "D5", 1, trainFaceFileCount);
             }
         }
 
@@ -154,7 +168,7 @@ namespace ImageProcessor {
             if (!TrainNotFacePrefixTextBox.IsEmpty("Train not face prefix,")) {
                 ResetProgress(trainNotFaceFileCount);
                 var prefix = TrainNotFacePrefixTextBox.Text;
-                ProcessDirAsync(dirTrainNotFaceBmp, prefix, "D5", 1, trainNotFaceFileCount, "trainDataNotFace.csv", 0);
+                ProcessDirAsync(dirTrainNotFaceBmp, "trainDataNotFace.csv", ImageType.NotFace, true, prefix, "D5", 1, trainNotFaceFileCount);
             }
         }
 
@@ -176,9 +190,9 @@ namespace ImageProcessor {
                 using (File.Create(outputFile)) { };
 
                 try {
-                    Task taskTrainFace = Task.Factory.StartNew(() => Work(dirTrainFaceBmp, prefix, "D5", 1, trainFaceFileCount, outputFile, 1), token);
+                    Task taskTrainFace = Task.Factory.StartNew(() => Work(dirTrainFaceBmp, outputFile, ImageType.Face, true, prefix, "D5", 1, trainFaceFileCount), token);
                     await Task.WhenAll(taskTrainFace);
-                    Task taskTrainNotFace = Task.Factory.StartNew(() => Work(dirTrainNotFaceBmp, prefix2, "D5", 0, trainNotFaceFileCount - 1, outputFile, 0), token);
+                    Task taskTrainNotFace = Task.Factory.StartNew(() => Work(dirTrainNotFaceBmp, outputFile, ImageType.NotFace, true, prefix2, "D5", 0, trainNotFaceFileCount - 1), token);
                     await Task.WhenAll(taskTrainNotFace);
                     Form1.Instance.SetCurrentStatus("Finished!");
                 } catch (OperationCanceledException) {
@@ -193,7 +207,7 @@ namespace ImageProcessor {
             if (!TestFacePrefixTextBox.IsEmpty("Test face prefix,")) {
                 ResetProgress(testFaceFileCount);
                 var prefix = TestFacePrefixTextBox.Text;
-                ProcessDirAsync(dirTestFaceBmp, prefix, "D4", 0, testFaceFileCount - 1, "testDataFace.csv", 1);
+                ProcessDirAsync(dirTestFaceBmp, "testDataFace.csv", ImageType.Face, true, prefix, "D4", 0, testFaceFileCount - 1);
             }
         }
 
@@ -201,7 +215,7 @@ namespace ImageProcessor {
             if (!TestNotFacePrefixTextBox.IsEmpty("Test not face prefix,")) {
                 ResetProgress(testNotFaceFileCount);
                 var prefix = TestNotFacePrefixTextBox.Text;
-                ProcessDirAsync(dirTestNotFaceBmp, prefix, "D6", 0, testNotFaceFileCount - 1, "testDataNotFace.csv", 0);
+                ProcessDirAsync(dirTestNotFaceBmp, "testDataNotFace.csv", ImageType.NotFace, true, prefix, "D6", 0, testNotFaceFileCount - 1);
             }
         }
 
@@ -220,11 +234,12 @@ namespace ImageProcessor {
 
                 Directory.CreateDirectory(dirNew);
                 string outputFile = dirNew + "testDataBoth.csv";
+                using (File.Create(outputFile)) { };
 
                 try {
-                    Task taskTestFace = Task.Factory.StartNew(() => Work(dirTestFaceBmp, prefix, "D4", 0, testFaceFileCount - 1, outputFile, 1), token);
+                    Task taskTestFace = Task.Factory.StartNew(() => Work(dirTestFaceBmp, outputFile, ImageType.Face, true, prefix, "D4", 0, testFaceFileCount - 1), token);
                     await Task.WhenAll(taskTestFace);
-                    Task taskTestNotFace = Task.Factory.StartNew(() => Work(dirTestNotFaceBmp, prefix2, "D6", 0, testNotFaceFileCount - 1, outputFile, 0), token);
+                    Task taskTestNotFace = Task.Factory.StartNew(() => Work(dirTestNotFaceBmp, outputFile, ImageType.NotFace, true, prefix2, "D6", 0, testNotFaceFileCount - 1), token);
                     await Task.WhenAll(taskTestNotFace);
                     Form1.Instance.SetCurrentStatus("Finished!");
                 } catch (OperationCanceledException) {
@@ -235,7 +250,18 @@ namespace ImageProcessor {
             }
         }
 
+
+        private void LfwProcessFaces_Click(object sender, EventArgs e) {
+            Form1.Instance.ClearOutput();
+            ResetProgress(lfwFaceCount);
+            Form1.Instance.SetCurrentStatus("Processing...");
+            Directory.CreateDirectory(dirNew);
+            string outputFile = "lfwFaceData.csv";
+            ProcessDirAsync(dirLfwFaceBmp, outputFile, ImageType.Face);
+        }
+
         private void ResetProgress(int numOfFiles) {
+            startTimeMs = TimeUtils.GetCurrentTimeMillisSinceEpoch();
             ImgProgressBar.Value = 0;
             filesProcessed = 0;
             PercentageComplete.Text = "0%";
@@ -256,7 +282,7 @@ namespace ImageProcessor {
         /// <param name="outputFile">"trainDataFace.csv"</param>
         /// <param name="classification">0 or 1, i.e. face or not face</param>
         /// <param name="show">verbosity</param>
-        private async void ProcessDirAsync(string inputDirectory, string prefix, string formatS, int lowVal, int hiVal, string outputFile, int classification) {
+        private async void ProcessDirAsync(string inputDirectory, string outputFile, ImageType classification, bool hasPrefixes = false, string prefix = null, string formatS = null, int lowVal = 0, int hiVal = 0) {
             Form1.Instance.ClearOutput();
             Form1.Instance.SetCurrentStatus("Processing...");
 
@@ -265,9 +291,10 @@ namespace ImageProcessor {
             var token = cancelTokenSource.Token;
 
             string outName = inputDirectory + outputFile;
+            using (File.Create(outName)) { };
 
             try {
-                await Task.Factory.StartNew(() => Work(inputDirectory, prefix, formatS, lowVal, hiVal, outName, classification), token);
+                await Task.Factory.StartNew(() => Work(inputDirectory, outName, classification, hasPrefixes, prefix, formatS, lowVal, hiVal), token);
                 Form1.Instance.SetCurrentStatus("Finished!");
             } catch (OperationCanceledException) {
                 Form1.Instance.SetCurrentStatus("Stopped!");
@@ -276,47 +303,68 @@ namespace ImageProcessor {
             }
         }
 
-        private void Work(string inputDirectory, string prefix, string formatS, int lowVal, int hiVal, string outName, int classification) {
+        private void Work(string inputDirectory, string outName, ImageType classification, bool hasPrefixes = false, string prefix = null, string formatS = null, int lowVal = 0, int hiVal = 0) {
             {
                 if (!File.Exists(outName))
                     using (File.Create(outName)) { };
 
                 using (StreamWriter file = File.AppendText(outName)) {
-                    for (int i = lowVal; i <= hiVal; i++) {
-                        // handbrake
-                        cancelTokenSources.ForEach(ts => ts.Token.ThrowIfCancellationRequested());
-                        //cancelToken.ThrowIfCancellationRequested();
-                        string fname;
-                        if (formatS == "D6" && i <= 9999) {
-                            fname = inputDirectory + prefix + i.ToString("D4") + ".bmp";
-                        } else if (formatS == "D6" && i > 9999) {
-                            fname = inputDirectory + prefix + i.ToString("D5") + ".bmp";
-                        } else
-                            fname = inputDirectory + prefix + i.ToString(formatS) + ".bmp";
+                    if (hasPrefixes) { // honour the defined naming prefixing and image indexing ranges
+                        for (int i = lowVal; i <= hiVal; i++) {
+                            string fname;
 
-                        if (!File.Exists(fname)) {
-                            Form1.Instance.AppendText("WARN - File not found, skipping filename=" + fname + "\r\n");
-                        } else {
+                            // handbrake
+                            cancelTokenSources.ForEach(ts => ts.Token.ThrowIfCancellationRequested());
 
-                            string val = ProcessImage(fname, classification);
-                            if (val == "") {
-                                Form1.Instance.AppendText("ERROR - A problem occurred processing " + fname + ", aborting." + "\r\n");
-                                break;
-                            }
+                            if (formatS == "D6" && i <= 9999) {
+                                fname = inputDirectory + prefix + i.ToString("D4") + ".bmp";
+                            } else if (formatS == "D6" && i > 9999) {
+                                fname = inputDirectory + prefix + i.ToString("D5") + ".bmp";
+                            } else
+                                fname = inputDirectory + prefix + i.ToString(formatS) + ".bmp";
 
-                            Form1.Instance.SetCurrentStatus("Processing > " + fname + " into " + outName + "\r\n");
-                            //if (i < 10) {
-                            //    Form1.Instance.AppendText(val + "\r\n");
-                            //}
-                            //if (i == 10) break; // debug exit
+                            SingleJob(file, fname, classification, outName);
+                        }
+                    } else { // just iterate through all files in the given directory
+                        string[] filePaths = Directory.GetFiles(inputDirectory);
 
-                            file.WriteLine(val);
-
-                            // update progress bar
-                            Form1.Instance.ReportFileProcessed();
+                        for (int i = 0; i < filePaths.Length; i++) {
+                            // handbrake
+                            cancelTokenSources.ForEach(ts => ts.Token.ThrowIfCancellationRequested());
+                            string ff = filePaths[i];
+                            string fname = Path.GetFileName(ff);
+                            SingleJob(file, ff, classification, outName);
                         }
                     }
                 }
+            }
+        }
+
+        private void SingleJob(StreamWriter file, string fname, ImageType classification, string outName) {
+            if (!fname.ToUpper().EndsWith(".BMP")) {
+                Form1.Instance.AppendVerboseText("Skipped non-bmp files, filename=" + fname);
+                return;
+            }
+
+            if (!File.Exists(fname)) {
+                Form1.Instance.AppendText("WARN - File not found, skipping filename=" + fname + "\r\n");
+            } else {
+                string val = ProcessImage(fname, (int)classification);
+                if (val == "") {
+                    Form1.Instance.AppendText("ERROR - A problem occurred processing " + fname + ", aborting." + "\r\n");
+                    cancelTokenSources.ForEach(ts => ts.Token.ThrowIfCancellationRequested());
+                }
+
+                Form1.Instance.SetCurrentStatus("Processing > " + fname + " into " + outName + "\r\n");
+                //if (i < 10) {
+                //    Form1.Instance.AppendText(val + "\r\n");
+                //}
+                //if (i == 10) break; // debug exit
+
+                file.WriteLine(val);
+
+                // update progress bar
+                Form1.Instance.ReportFileProcessed();
             }
         }
 
@@ -337,9 +385,10 @@ namespace ImageProcessor {
         public string ProcessImage(string filename, int classification) {
             var bmp = new Bitmap(filename, false);
 
-            Form1.Instance.SetSobelImage(bmp.ConvolutionFilter(widthHeightSize, selectedOperator));
-            Form1.Instance.SetPreviewImage(new Bitmap(filename));
-
+            if (showLivePreview) {
+                Form1.Instance.SetSobelImage(bmp.ConvolutionFilter(widthHeightSize, selectedOperator));
+                Form1.Instance.SetPreviewImage(new Bitmap(filename));
+            }
             Form1.Instance.AppendVerboseText("\r\n  .#.....................................#.  \r\n");
             Form1.Instance.AppendVerboseText("Fname = " + filename + "\r\n");
             string bb = ShowBitmap(bmp);
@@ -440,6 +489,11 @@ namespace ImageProcessor {
                 filesProcessed++;
                 ImgProgressBar.Value = filesProcessed * 100 / totalFilesToProcess;
                 PercentageComplete.Text = ImgProgressBar.Value + "%";
+                fileCountProgress.Text = "Processed files (" + filesProcessed + "/" + totalFilesToProcess + ")";
+
+                var durationMillis = TimeUtils.GetTimeElapsedMillisSince(startTimeMs);
+                JobDurationLabel.Text = TimeUtils.GetFormattedDurationFromMillis(durationMillis);
+
             }
         }
         #endregion
@@ -447,63 +501,63 @@ namespace ImageProcessor {
         #region Operator Radio Button Clicks
 
         private void Prewitt3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Prewitt3x3x1;
+            selectedOperator = Operators.Prewitt3x3x1;
         }
 
         private void Prewitt3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Prewitt3x3x4;
+            selectedOperator = Operators.Prewitt3x3x4;
         }
 
         private void Prewitt3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Prewitt3x3x8;
+            selectedOperator = Operators.Prewitt3x3x8;
         }
 
         private void Kirsch3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Kirsch3x3x1;
+            selectedOperator = Operators.Kirsch3x3x1;
         }
 
         private void Kirsch3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Kirsch3x3x4;
+            selectedOperator = Operators.Kirsch3x3x4;
         }
 
         private void Kirsch3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Kirsch3x3x8;
+            selectedOperator = Operators.Kirsch3x3x8;
         }
 
         private void Sobel3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Sobel3x3x1;
+            selectedOperator = Operators.Sobel3x3x1;
         }
 
         private void Sobel3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Sobel3x3x4;
+            selectedOperator = Operators.Sobel3x3x4;
         }
 
         private void Sobel3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Sobel3x3x8;
+            selectedOperator = Operators.Sobel3x3x8;
         }
 
         private void Scharr3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Scharr3x3x1;
+            selectedOperator = Operators.Scharr3x3x1;
         }
 
         private void Scharr3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Scharr3x3x4;
+            selectedOperator = Operators.Scharr3x3x4;
         }
 
         private void Scharr3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Scharr3x3x8;
+            selectedOperator = Operators.Scharr3x3x8;
         }
 
         private void Isotropic3x3x1RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Isotropic3x3x1;
+            selectedOperator = Operators.Isotropic3x3x1;
         }
 
         private void Isotropic3x3x4RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Isotropic3x3x4;
+            selectedOperator = Operators.Isotropic3x3x4;
         }
 
         private void Isotropic3x3x8RadioButton_CheckedChanged(object sender, EventArgs e) {
-            selectedOperator = Matrix.Isotropic3x3x8;
+            selectedOperator = Operators.Isotropic3x3x8;
         }
 
         #endregion
@@ -690,5 +744,47 @@ namespace ImageProcessor {
         //    }
         //}
         #endregion
+
+        private void livePreviewCheckBox_CheckedChanged(object sender, EventArgs e) {
+            showLivePreview = ((CheckBox)sender).Checked;
+        }
+
+        private void TrainStartIndexNumeric_ValueChanged(object sender, EventArgs e) {
+
+        }
+
+        private void TrainEndIndexNumeric_ValueChanged(object sender, EventArgs e) {
+
+        }
+
+        private void TestStartIndexNumeric_ValueChanged(object sender, EventArgs e) {
+
+        }
+
+        private void TestEndIndexNumeric_ValueChanged(object sender, EventArgs e) {
+
+        }
+
+        private void comboBox1_SelectedValueChanged(object sender, EventArgs e) {
+            OperatorNames selection;
+            Enum.TryParse<OperatorNames>(((ComboBox)sender).SelectedValue.ToString(), out selection);
+            switch (selection) {
+                case OperatorNames.Prewitt3x3x1: selectedOperator = Operators.Prewitt3x3x1; break;
+                case OperatorNames.Prewitt3x3x4: selectedOperator = Operators.Prewitt3x3x4; break;
+                case OperatorNames.Prewitt3x3x8: selectedOperator = Operators.Prewitt3x3x8; break;
+                case OperatorNames.Kirsch3x3x1: selectedOperator = Operators.Kirsch3x3x1; break;
+                case OperatorNames.Kirsch3x3x4: selectedOperator = Operators.Kirsch3x3x4; break;
+                case OperatorNames.Kirsch3x3x8: selectedOperator = Operators.Kirsch3x3x8; break;
+                case OperatorNames.Sobel3x3x1: selectedOperator = Operators.Sobel3x3x1; break;
+                case OperatorNames.Sobel3x3x4: selectedOperator = Operators.Sobel3x3x4; break;
+                case OperatorNames.Sobel3x3x8: selectedOperator = Operators.Sobel3x3x8; break;
+                case OperatorNames.Scharr3x3x1: selectedOperator = Operators.Scharr3x3x1; break;
+                case OperatorNames.Scharr3x3x4: selectedOperator = Operators.Scharr3x3x4; break;
+                case OperatorNames.Scharr3x3x8: selectedOperator = Operators.Scharr3x3x8; break;
+                case OperatorNames.Isotropic3x3x1: selectedOperator = Operators.Isotropic3x3x1; break;
+                case OperatorNames.Isotropic3x3x4: selectedOperator = Operators.Isotropic3x3x4; break;
+                case OperatorNames.Isotropic3x3x8: selectedOperator = Operators.Isotropic3x3x8; break;
+            }
+        }
     }
 }

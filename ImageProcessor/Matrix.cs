@@ -5,7 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ImageProcessor {
-    public static class Matrix {
+    public enum OperatorNames {
+        Prewitt3x3x1,
+        Prewitt3x3x4,
+        Prewitt3x3x8,
+        Kirsch3x3x1,
+        Kirsch3x3x4,
+        Kirsch3x3x8,
+        Sobel3x3x1,
+        Sobel3x3x4,
+        Sobel3x3x8,
+        Scharr3x3x1,
+        Scharr3x3x4,
+        Scharr3x3x8,
+        Isotropic3x3x1,
+        Isotropic3x3x4,
+        Isotropic3x3x8
+    }
+
+    public static class Operators {
 
         public static double[,,] Prewitt3x3x1 {
             get {
