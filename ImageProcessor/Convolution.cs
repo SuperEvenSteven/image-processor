@@ -11,22 +11,11 @@ namespace ImageProcessor {
     /// <summary>
     /// Compass edge detection original author:  Dewald Esterhuizen
     ///  
-    /// Heavily modified for use in an experimental comparison against Robert Cox's 3x3 Sobel Operator.
-    /// 
-    /// For research use in Soft Computing - University of Canberra.
+    /// Heavily modified by Stephen O'Hair for use in an experimental comparison against various operator masks.
     /// 
     /// Sourced from: https://softwarebydefault.com/2013/06/22/compass-edge-detection/
-    /// 
     /// </summary>
-    /// <param name="baseKernel"></param>
-    /// <param name="degrees"></param>
-    /// <returns></returns>
     public static class Convolution {
-
-        /// <summary>
-        /// Operator definitions.
-        /// </summary>
-
 
         // TODO - auto-generate this
         private static readonly int[] gaps = new int[7] { 0, 3, 6, 8, 10, 13, 16 };

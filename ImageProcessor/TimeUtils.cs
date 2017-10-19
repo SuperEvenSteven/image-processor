@@ -26,7 +26,9 @@ namespace ImageProcessor {
         /// As name suggests.
         /// </summary>
         internal static long GetTimeElapsedSecondsSince(long startTimeSecs) {
-            return GetCurrentTimeSecondsSinceEpoch() - startTimeSecs;
+            long now = GetCurrentTimeSecondsSinceEpoch();
+            long elapsedSecs = now - startTimeSecs;
+            return elapsedSecs;
         }
 
 
@@ -52,6 +54,7 @@ namespace ImageProcessor {
                 t.Milliseconds);
             return s;
         }
+
 
         /// <summary>
         /// As name suggests.

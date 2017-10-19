@@ -49,17 +49,16 @@ namespace ImageProcessor {
         private const int testNotFaceFileCount = 23573;
         private const int lfwFaceCount = 13223;
         private const int totalFileCount = 31020;
+
+        private const string dirTestFaceBmp = @"C:\Temp\IPP\FaceData\TestFaceBmp\";
+        private const string dirTestNotFaceBmp = @"C:\Temp\IPP\FaceData\TestNotFaceBmp\";
+        private const string dirTrainFaceBmp = @"C:\Temp\IPP\FaceData\TrainFaceBmp\";
+        private const string dirTrainNotFaceBmp = @"C:\Temp\IPP\FaceData\TrainNotFaceBmp\";
+        private const string dirLfwFaceBmp = @"C:\Temp\IPP\FaceData\LfwFacesBmp\";
+        private const string dirEvaluationDataSet = @"C:\Temp\ANN\EvaluationDataSets\";
         #endregion
 
         #region Member variables
-        private string dirTestFaceBmp = @"C:\Temp\IPP\FaceData\TestFaceBmp\";
-        private string dirTestNotFaceBmp = @"C:\Temp\IPP\FaceData\TestNotFaceBmp\";
-        private string dirTrainFaceBmp = @"C:\Temp\IPP\FaceData\TrainFaceBmp\";
-        private string dirTrainNotFaceBmp = @"C:\Temp\IPP\FaceData\TrainNotFaceBmp\";
-        private string dirLfwFaceBmp = @"C:\Temp\IPP\FaceData\LfwFacesBmp\";
-        private string dirNew = @"C:\Temp\IPP\FaceData\Both\";
-
-        //technically a filter since it's 2 or more operators
         int widthHeightSize = 7;
         bool verboseOutput = false;
         double[,,] selectedOperator;
@@ -67,19 +66,216 @@ namespace ImageProcessor {
         private int filesProcessed = 0;
         private bool showLivePreview = true;
         private int totalFilesToProcess = 0;
+        private string statusBarPadding = "|    ";
         private List<CancellationTokenSource> cancelTokenSources = new List<CancellationTokenSource>();
-
         #endregion
 
+        #region File Index Range Member variables
+        private int testFacesStartIndex;
+        private int testFacesEndIndex;
+        private int testNonFacesStartIndex;
+        private int testNonFacesEndIndex;
+        private int trainFacesStartIndex;
+        private int trainFacesEndIndex;
+        private int trainNonFacesStartIndex;
+        private int trainNonFacesEndIndex;
+        #endregion
+
+        #region Constructor
         public Form1() {
             InitializeComponent();
             Form1.Instance = this;
-            //load the combobox
+            SetControlDefaults();
+        }
+        #endregion
+
+        #region UI Controls State
+        private void SetControlDefaults() {
+            // load the combobox
             OperatorComboBox.DataSource = Enum.GetValues(typeof(OperatorNames));
-            //OperatorComboBox.SelectedValue = (int)OperatorNames.Sobel3x3x1;
+            OperatorComboBox.SelectedItem = OperatorNames.Sobel3x3x1.ToString();
+
+            // set high and low  for the indexed image sets
+            testFacesStartIndex = 0;
+            testFacesEndIndex = 471;
+            testNonFacesStartIndex = 0;
+            testNonFacesEndIndex = 23572;
+            trainFacesStartIndex = 1;
+            trainFacesEndIndex = 2429;
+            trainNonFacesStartIndex = 0;
+            trainNonFacesEndIndex = 4547;
         }
 
-        #region Debug Button Clicks
+        /// <summary>
+        /// Used to allow outputBox text updates from async threads.
+        /// </summary>
+        /// <param name="s"></param>
+        public void AppendText(string s) {
+            if (this.InvokeRequired) {// delegate the UI instance update the output
+                this.Invoke(new MethodInvoker(() => this.AppendText(s)));
+            } else {// UI-only call to update the output instance
+                outputTextBox.AppendText(s);
+            }
+        }
+
+        /// <summary>
+        /// Used to allow outputBox text updates from async threads.
+        /// </summary>
+        /// <param name="s"></param>
+        public void AppendVerboseText(string s) {
+            if (verboseOutput) {
+                if (this.InvokeRequired) {// delegate the UI instance update the output
+                    this.Invoke(new MethodInvoker(() => this.AppendText(s)));
+                } else {// UI-only call to update the output instance
+                    outputTextBox.AppendText(s);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Used to allow current status text updates from async threads.
+        /// </summary>
+        /// <param name="s"></param>
+        public void SetCurrentStatus(string s) {
+            if (this.InvokeRequired) {// delegate the UI instance update the current status text
+                this.Invoke(new MethodInvoker(() => this.SetCurrentStatus(s)));
+            } else {// UI-only call to update the current status text
+                CurrentStatusLabel.Text = s;
+            }
+        }
+
+        /// <summary>
+        /// Used to allow outputBox text to be cleared from async threads.
+        /// </summary>
+        /// <param name="s"></param>
+        public void ClearOutput() {
+            if (this.InvokeRequired) {// delegate the UI instance clear the output
+                this.Invoke(new MethodInvoker(() => this.ClearOutput()));
+            } else {// UI-only call to update the output instance
+                outputTextBox.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Used to set the sobel image from async threads.
+        /// </summary>
+        /// <param name="s"></param>
+        public void SetSobelImage(Bitmap bmp) {
+            if (this.InvokeRequired) {// delegate the UI instance set the sobel image
+                this.Invoke(new MethodInvoker(() => this.SetSobelImage(bmp)));
+            } else {// UI-only call to set the sobel image
+                EdgedPictureBox.Image = bmp;
+            }
+        }
+
+        /// <summary>
+        /// Used to set the preview image from async threads.
+        /// </summary>
+        /// <param name="s"></param>
+        public void SetPreviewImage(Bitmap bmp) {
+            if (this.InvokeRequired) {// delegate the UI instance set the preview image
+                this.Invoke(new MethodInvoker(() => this.SetPreviewImage(bmp)));
+            } else {// UI-only call to set the preview image
+                PreviewPictureBox.Image = bmp;
+            }
+        }
+
+        /// <summary>
+        /// Used to update the progress bar and completed percentage from async threads.
+        /// </summary>
+        /// <param name="s"></param>
+        public void ReportFileProcessed() {
+            if (this.InvokeRequired) {// let the UI instance update the progress bar and completed percentage
+                this.Invoke(new MethodInvoker(() => this.ReportFileProcessed()));
+            } else {// UI-only call to set the preview image
+                filesProcessed++;
+                ImgProgressBar.Value = filesProcessed * 100 / totalFilesToProcess;
+                PercentageComplete.Text = statusBarPadding + ImgProgressBar.Value + "%";
+                FileCountProgress.Text = statusBarPadding + "Processed files (" + filesProcessed + "/" + totalFilesToProcess + ")";
+                var timeElapsedMs = TimeUtils.GetTimeElapsedMillisSince(startTimeMs);
+                TimeSpan t = TimeSpan.FromMilliseconds(timeElapsedMs);
+                var rate = ((double)filesProcessed / t.TotalSeconds);
+                rate = Math.Truncate(rate * 100) / 100; // truncate the decimal places
+                ProcessingRateLabel.Text = statusBarPadding
+                    + "(rate " + rate.ToString()
+                    + " files/ps)";
+                var durationMillis = TimeUtils.GetTimeElapsedMillisSince(startTimeMs);
+                JobDurationLabel.Text = statusBarPadding + "Duration" + TimeUtils.GetFormattedDurationFromMillis(durationMillis);
+
+            }
+        }
+
+        /// <summary>
+        /// Resets the progress bar and all status bar stats.
+        /// </summary>
+        /// <param name="numOfFiles"></param>
+        private void ResetProgress(int numOfFiles) {
+            StopButton.Enabled = true;
+            SetControlsEnabledState(false);
+            startTimeMs = TimeUtils.GetCurrentTimeMillisSinceEpoch();
+            ImgProgressBar.Value = 0;
+            filesProcessed = 0;
+            PercentageComplete.Text = "0%";
+            FileCountProgress.Text = statusBarPadding + "Processed files (0/0)";
+            ProcessingRateLabel.Text = statusBarPadding + "( rate 0 files/ps )";
+            totalFilesToProcess = numOfFiles;
+            JobDurationLabel.Text = statusBarPadding + "Duration 00h:00m:00s:000ms";
+        }
+
+        /// <summary>
+        /// Toggle method to show working and idle states for all controls.
+        /// </summary>
+        /// <param name="b"></param>
+        private void SetControlsEnabledState(bool b) {
+            if (b) {
+                StopButton.BackColor = default(Color);
+                StopButton.ForeColor = default(Color);
+            } else {
+                StopButton.BackColor = Color.Red;
+                StopButton.ForeColor = Color.White;
+            }
+            StopButton.Enabled = !b;
+            DebugGroupBox.Enabled = b;
+            LfwGroupBox.Enabled = b;
+            OperatorGroupBox.Enabled = b;
+            TrainGroupBox.Enabled = b;
+            TestGroupBox.Enabled = b;
+            RenamingGroupBox.Enabled = b;
+        }
+
+        /// <summary>
+        /// Enable/disable the live preview image box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void livePreviewCheckBox_CheckedChanged(object sender, EventArgs e) {
+            showLivePreview = ((CheckBox)sender).Checked;
+        }
+
+        private void OperatorComboBox_SelectedValueChanged(object sender, EventArgs e) {
+            OperatorNames selection;
+            Enum.TryParse<OperatorNames>(((ComboBox)sender).SelectedValue.ToString(), out selection);
+            switch (selection) {
+                case OperatorNames.Prewitt3x3x1: selectedOperator = Operators.Prewitt3x3x1; break;
+                case OperatorNames.Prewitt3x3x4: selectedOperator = Operators.Prewitt3x3x4; break;
+                case OperatorNames.Prewitt3x3x8: selectedOperator = Operators.Prewitt3x3x8; break;
+                case OperatorNames.Kirsch3x3x1: selectedOperator = Operators.Kirsch3x3x1; break;
+                case OperatorNames.Kirsch3x3x4: selectedOperator = Operators.Kirsch3x3x4; break;
+                case OperatorNames.Kirsch3x3x8: selectedOperator = Operators.Kirsch3x3x8; break;
+                case OperatorNames.Sobel3x3x1: selectedOperator = Operators.Sobel3x3x1; break;
+                case OperatorNames.Sobel3x3x4: selectedOperator = Operators.Sobel3x3x4; break;
+                case OperatorNames.Sobel3x3x8: selectedOperator = Operators.Sobel3x3x8; break;
+                case OperatorNames.Scharr3x3x1: selectedOperator = Operators.Scharr3x3x1; break;
+                case OperatorNames.Scharr3x3x4: selectedOperator = Operators.Scharr3x3x4; break;
+                case OperatorNames.Scharr3x3x8: selectedOperator = Operators.Scharr3x3x8; break;
+                case OperatorNames.Isotropic3x3x1: selectedOperator = Operators.Isotropic3x3x1; break;
+                case OperatorNames.Isotropic3x3x4: selectedOperator = Operators.Isotropic3x3x4; break;
+                case OperatorNames.Isotropic3x3x8: selectedOperator = Operators.Isotropic3x3x8; break;
+            }
+        }
+        #endregion
+
+        #region Debug & Other Button Clicks
         private void DisplayAsRawRGBButton_Click(object sender, EventArgs e) {
             var bmp = new Bitmap(dirTrainFaceBmp + "face00001.bmp", false);
             PreviewPictureBox.Image = bmp;
@@ -116,10 +312,6 @@ namespace ImageProcessor {
             verboseOutput = v;
         }
 
-        #endregion
-
-        #region Main Menu
-
         private void RestoreDefaultsBtn_Click(object sender, EventArgs e) {
             // default rename file prefixes
             TrainFaceRenameTxtBx.Text = "cmu_";
@@ -138,6 +330,15 @@ namespace ImageProcessor {
             TrainNotFaceDestDir.Text = "";
             TestFaceDestDir.Text = "";
             TestNotFaceDestDir.Text = "";
+
+            TestFaceStartIndexNumeric.Value = 0;
+            TestFaceEndIndexNumeric.Value = 471;
+            TestNonFaceStartIndexNumeric.Value = 0;
+            TestNonFaceEndIndexNumeric.Value = 23572;
+            TrainFacesStartIndexNumeric.Value = 1;
+            TrainFacesEndIndexNumeric.Value = 2429;
+            TrainNonFacesStartIndexNumeric.Value = 0;
+            TrainNonFacesEndIndexNumeric.Value = 4547;
         }
 
         private void StopButton_Click(object sender, EventArgs e) {
@@ -154,13 +355,14 @@ namespace ImageProcessor {
 
         #endregion
 
-        #region Image Set Processing Actions
+        #region Imageset Processing Actions
 
         private void ProcessTrainFacesButton_Click(object sender, EventArgs e) {
             if (!TrainFacePrefixTextBox.IsEmpty("Train face prefix,")) {
                 ResetProgress(trainFaceFileCount);
                 var prefix = TrainFacePrefixTextBox.Text;
-                ProcessDirAsync(dirTrainFaceBmp, "trainDataFace.csv", ImageType.Face, true, prefix, "D5", 1, trainFaceFileCount);
+                var outputName = "trainDataFace" + trainFaceFileCount + "_records" + ".csv";
+                ProcessDirAsync(dirTrainFaceBmp, outputName, ImageType.Face, true, prefix, "D5", trainFacesStartIndex, trainFacesEndIndex);
             }
         }
 
@@ -168,13 +370,15 @@ namespace ImageProcessor {
             if (!TrainNotFacePrefixTextBox.IsEmpty("Train not face prefix,")) {
                 ResetProgress(trainNotFaceFileCount);
                 var prefix = TrainNotFacePrefixTextBox.Text;
-                ProcessDirAsync(dirTrainNotFaceBmp, "trainDataNotFace.csv", ImageType.NotFace, true, prefix, "D5", 1, trainNotFaceFileCount);
+                var outputName = "trainDataNotFace" + trainNotFaceFileCount + "_records" + ".csv";
+                ProcessDirAsync(dirTrainNotFaceBmp, outputName, ImageType.NotFace, true, prefix, "D5", trainNonFacesStartIndex, trainNonFacesEndIndex);
             }
         }
 
         private async void ProcessTrainFaceBoth_Click(object sender, EventArgs e) {
             if (!TrainNotFacePrefixTextBox.IsEmpty("Train not face prefix,") || !TrainFacePrefixTextBox.IsEmpty("Train face prefix,")) {
-                ResetProgress(trainFaceFileCount + trainNotFaceFileCount);
+                var totalFiles = trainFaceFileCount + trainNotFaceFileCount;
+                ResetProgress(totalFiles);
                 var prefix = TrainFacePrefixTextBox.Text;
                 var prefix2 = TrainNotFacePrefixTextBox.Text;
 
@@ -185,19 +389,23 @@ namespace ImageProcessor {
                 cancelTokenSources.Add(cancelTokenSource);
                 var token = cancelTokenSource.Token;
 
-                Directory.CreateDirectory(dirNew);
-                string outputFile = dirNew + "trainDataBoth.csv";
+                Directory.CreateDirectory(dirEvaluationDataSet);
+                string outputFile = dirEvaluationDataSet + "trainDataBoth_" + totalFiles + "_records" + ".csv";
                 using (File.Create(outputFile)) { };
 
                 try {
-                    Task taskTrainFace = Task.Factory.StartNew(() => Work(dirTrainFaceBmp, outputFile, ImageType.Face, true, prefix, "D5", 1, trainFaceFileCount), token);
+                    Task taskTrainFace = Task.Factory.StartNew(() => Work(dirTrainFaceBmp, outputFile, ImageType.Face, true, prefix, "D5",
+                        trainFacesStartIndex, trainFacesEndIndex), token);
                     await Task.WhenAll(taskTrainFace);
-                    Task taskTrainNotFace = Task.Factory.StartNew(() => Work(dirTrainNotFaceBmp, outputFile, ImageType.NotFace, true, prefix2, "D5", 0, trainNotFaceFileCount - 1), token);
+                    Task taskTrainNotFace = Task.Factory.StartNew(() => Work(dirTrainNotFaceBmp, outputFile, ImageType.NotFace, true, prefix2, "D5",
+                        trainNonFacesStartIndex, trainNonFacesEndIndex), token);
                     await Task.WhenAll(taskTrainNotFace);
                     Form1.Instance.SetCurrentStatus("Finished!");
                 } catch (OperationCanceledException) {
                     Form1.Instance.SetCurrentStatus("Stopped!");
                 } finally {
+                    StopButton.Enabled = false;
+                    SetControlsEnabledState(true);
                     cancelTokenSources.Remove(cancelTokenSource);
                 }
             }
@@ -207,7 +415,8 @@ namespace ImageProcessor {
             if (!TestFacePrefixTextBox.IsEmpty("Test face prefix,")) {
                 ResetProgress(testFaceFileCount);
                 var prefix = TestFacePrefixTextBox.Text;
-                ProcessDirAsync(dirTestFaceBmp, "testDataFace.csv", ImageType.Face, true, prefix, "D4", 0, testFaceFileCount - 1);
+                var outputName = "testDataFace" + testFaceFileCount + "_records" + ".csv";
+                ProcessDirAsync(dirTestFaceBmp, outputName, ImageType.Face, true, prefix, "D4", testFacesStartIndex, testFacesEndIndex);
             }
         }
 
@@ -215,13 +424,15 @@ namespace ImageProcessor {
             if (!TestNotFacePrefixTextBox.IsEmpty("Test not face prefix,")) {
                 ResetProgress(testNotFaceFileCount);
                 var prefix = TestNotFacePrefixTextBox.Text;
-                ProcessDirAsync(dirTestNotFaceBmp, "testDataNotFace.csv", ImageType.NotFace, true, prefix, "D6", 0, testNotFaceFileCount - 1);
+                var outputName = "testDataNotFace_" + testNotFaceFileCount + "_records" + ".csv";
+                ProcessDirAsync(dirTestNotFaceBmp, outputName, ImageType.NotFace, true, prefix, "D6", testNonFacesStartIndex, testNonFacesEndIndex);
             }
         }
 
         private async void ProcessBothTestButton_Click(object sender, EventArgs e) {
             if (!TestNotFacePrefixTextBox.IsEmpty("Test not face prefix,") || !TestFacePrefixTextBox.IsEmpty("Test face prefix,")) {
-                ResetProgress(testFaceFileCount + testNotFaceFileCount);
+                var totalFiles = testFaceFileCount + testNotFaceFileCount;
+                ResetProgress(totalFiles);
                 var prefix = TestFacePrefixTextBox.Text;
                 var prefix2 = TestNotFacePrefixTextBox.Text;
 
@@ -232,19 +443,22 @@ namespace ImageProcessor {
                 cancelTokenSources.Add(cancelTokenSource);
                 var token = cancelTokenSource.Token;
 
-                Directory.CreateDirectory(dirNew);
-                string outputFile = dirNew + "testDataBoth.csv";
+                Directory.CreateDirectory(dirEvaluationDataSet);
+                string outputFile = dirEvaluationDataSet + "testDataBoth_" + totalFiles + "_records" + ".csv";
                 using (File.Create(outputFile)) { };
 
                 try {
-                    Task taskTestFace = Task.Factory.StartNew(() => Work(dirTestFaceBmp, outputFile, ImageType.Face, true, prefix, "D4", 0, testFaceFileCount - 1), token);
+                    Task taskTestFace = Task.Factory.StartNew(() => Work(dirTestFaceBmp, outputFile, ImageType.Face, true, prefix, "D4",
+                        testFacesStartIndex, testFacesEndIndex), token);
                     await Task.WhenAll(taskTestFace);
-                    Task taskTestNotFace = Task.Factory.StartNew(() => Work(dirTestNotFaceBmp, outputFile, ImageType.NotFace, true, prefix2, "D6", 0, testNotFaceFileCount - 1), token);
+                    Task taskTestNotFace = Task.Factory.StartNew(() => Work(dirTestNotFaceBmp, outputFile, ImageType.NotFace, true, prefix2, "D6",
+                        testNonFacesStartIndex, testNonFacesEndIndex), token);
                     await Task.WhenAll(taskTestNotFace);
                     Form1.Instance.SetCurrentStatus("Finished!");
                 } catch (OperationCanceledException) {
                     Form1.Instance.SetCurrentStatus("Stopped!");
                 } finally {
+                    SetControlsEnabledState(true);
                     cancelTokenSources.Remove(cancelTokenSource);
                 }
             }
@@ -255,17 +469,8 @@ namespace ImageProcessor {
             Form1.Instance.ClearOutput();
             ResetProgress(lfwFaceCount);
             Form1.Instance.SetCurrentStatus("Processing...");
-            Directory.CreateDirectory(dirNew);
             string outputFile = "lfwFaceData.csv";
             ProcessDirAsync(dirLfwFaceBmp, outputFile, ImageType.Face);
-        }
-
-        private void ResetProgress(int numOfFiles) {
-            startTimeMs = TimeUtils.GetCurrentTimeMillisSinceEpoch();
-            ImgProgressBar.Value = 0;
-            filesProcessed = 0;
-            PercentageComplete.Text = "0%";
-            totalFilesToProcess = numOfFiles;
         }
         #endregion
 
@@ -274,15 +479,15 @@ namespace ImageProcessor {
         /// Asynchronously processes images in a directory using the selected mathematical operator. An output
         /// of 49 int parameters followed by it's classification is appended to the given filename.
         /// </summary>
-        /// <param name="inputDirectory"></param>
+        /// <param name="inputDir"></param>
         /// <param name="prefix">"face"</param>
         /// <param name="formatS">"D5"</param>
         /// <param name="lowVal">1</param>
         /// <param name="hiVal">2429</param>
-        /// <param name="outputFile">"trainDataFace.csv"</param>
+        /// <param name="outputDir">"trainDataFace.csv"</param>
         /// <param name="classification">0 or 1, i.e. face or not face</param>
         /// <param name="show">verbosity</param>
-        private async void ProcessDirAsync(string inputDirectory, string outputFile, ImageType classification, bool hasPrefixes = false, string prefix = null, string formatS = null, int lowVal = 0, int hiVal = 0) {
+        private async void ProcessDirAsync(string inputDir, string outputFile, ImageType classification, bool hasPrefixes = false, string prefix = null, string formatS = null, int lowVal = 0, int hiVal = 0) {
             Form1.Instance.ClearOutput();
             Form1.Instance.SetCurrentStatus("Processing...");
 
@@ -290,15 +495,18 @@ namespace ImageProcessor {
             cancelTokenSources.Add(cancelTokenSource);
             var token = cancelTokenSource.Token;
 
-            string outName = inputDirectory + outputFile;
-            using (File.Create(outName)) { };
+            Directory.CreateDirectory(dirEvaluationDataSet);
+            var outputPath = dirEvaluationDataSet + outputFile;
+            using (File.Create(outputPath)) { };
 
             try {
-                await Task.Factory.StartNew(() => Work(inputDirectory, outName, classification, hasPrefixes, prefix, formatS, lowVal, hiVal), token);
+                await Task.Factory.StartNew(() => Work(inputDir, outputPath, classification, hasPrefixes, prefix, formatS, lowVal, hiVal), token);
                 Form1.Instance.SetCurrentStatus("Finished!");
             } catch (OperationCanceledException) {
                 Form1.Instance.SetCurrentStatus("Stopped!");
             } finally {
+                StopButton.Enabled = false;
+                SetControlsEnabledState(true);
                 cancelTokenSources.Remove(cancelTokenSource);
             }
         }
@@ -402,99 +610,6 @@ namespace ImageProcessor {
             retv += classification.ToString();
             Form1.Instance.AppendVerboseText(retv);
             return retv;
-        }
-
-        /// <summary>
-        /// Used to allow outputBox text updates from async threads.
-        /// </summary>
-        /// <param name="s"></param>
-        public void AppendText(string s) {
-            if (this.InvokeRequired) {// delegate the UI instance update the output
-                this.Invoke(new MethodInvoker(() => this.AppendText(s)));
-            } else {// UI-only call to update the output instance
-                outputTextBox.AppendText(s);
-            }
-        }
-
-        /// <summary>
-        /// Used to allow outputBox text updates from async threads.
-        /// </summary>
-        /// <param name="s"></param>
-        public void AppendVerboseText(string s) {
-            if (verboseOutput) {
-                if (this.InvokeRequired) {// delegate the UI instance update the output
-                    this.Invoke(new MethodInvoker(() => this.AppendText(s)));
-                } else {// UI-only call to update the output instance
-                    outputTextBox.AppendText(s);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Used to allow current status text updates from async threads.
-        /// </summary>
-        /// <param name="s"></param>
-        public void SetCurrentStatus(string s) {
-            if (this.InvokeRequired) {// delegate the UI instance update the current status text
-                this.Invoke(new MethodInvoker(() => this.SetCurrentStatus(s)));
-            } else {// UI-only call to update the current status text
-                CurrentStatusLabel.Text = s;
-            }
-        }
-
-        /// <summary>
-        /// Used to allow outputBox text to be cleared from async threads.
-        /// </summary>
-        /// <param name="s"></param>
-        public void ClearOutput() {
-            if (this.InvokeRequired) {// delegate the UI instance clear the output
-                this.Invoke(new MethodInvoker(() => this.ClearOutput()));
-            } else {// UI-only call to update the output instance
-                outputTextBox.Clear();
-            }
-        }
-
-        /// <summary>
-        /// Used to set the sobel image from async threads.
-        /// </summary>
-        /// <param name="s"></param>
-        public void SetSobelImage(Bitmap bmp) {
-            if (this.InvokeRequired) {// delegate the UI instance set the sobel image
-                this.Invoke(new MethodInvoker(() => this.SetSobelImage(bmp)));
-            } else {// UI-only call to set the sobel image
-                EdgedPictureBox.Image = bmp;
-            }
-        }
-
-        /// <summary>
-        /// Used to set the preview image from async threads.
-        /// </summary>
-        /// <param name="s"></param>
-        public void SetPreviewImage(Bitmap bmp) {
-            if (this.InvokeRequired) {// delegate the UI instance set the preview image
-                this.Invoke(new MethodInvoker(() => this.SetPreviewImage(bmp)));
-            } else {// UI-only call to set the preview image
-                PreviewPictureBox.Image = bmp;
-            }
-        }
-
-        /// <summary>
-        /// Used to update the progress bar and completed percentage from async threads.
-        /// </summary>
-        /// <param name="s"></param>
-        public void ReportFileProcessed() {
-            if (this.InvokeRequired) {// let the UI instance update the progress bar and completed percentage
-                this.Invoke(new MethodInvoker(() => this.ReportFileProcessed()));
-            } else {// UI-only call to set the preview image
-                filesProcessed++;
-                ImgProgressBar.Value = filesProcessed * 100 / totalFilesToProcess;
-                PercentageComplete.Text = ImgProgressBar.Value + "%";
-                fileCountProgress.Text = "Processed files (" + filesProcessed + "/" + totalFilesToProcess + ")";
-
-                var durationMillis = TimeUtils.GetTimeElapsedMillisSince(startTimeMs);
-                JobDurationLabel.Text = TimeUtils.GetFormattedDurationFromMillis(durationMillis);
-
-            }
         }
         #endregion
 
@@ -703,88 +818,44 @@ namespace ImageProcessor {
         }
         #endregion
 
-        #region Not finished
-        // TODO - 
-        //private async void RenameAllImagesBtn_Click(object sender, EventArgs e) {
-        //    var cancelTokenSource = new CancellationTokenSource();
-        //    cancelTokenSources.Add(cancelTokenSource);
-        //    var token = cancelTokenSource.Token;
-        //    try {
-        //        cancelTokenSources.Add(cancelTokenSource);
-        //        ResetProgress(totalFileCount);
-        //        await Task.Factory.StartNew(() => {
-        //            // Stop! check all prefixes and paths are present before renaming anything
+        #region Start and End Indexes for Imageset Ranges
+        private void TrainFacesStartIndexNumeric_ValueChanged(object sender, EventArgs e) {
+            trainFacesStartIndex = (int)((NumericUpDown)sender).Value;
 
-        //            if (TrainFaceRenameTxtBx.IsEmpty("Renaming train face prefix,")) return;
-        //            if (TrainNotFaceRenameTxtBx.IsEmpty("Renaming train not face prefix,")) return;
-        //            if (TestFaceRenameTxtBx.IsEmpty("Renaming test face prefix,")) return;
-        //            if (TestNotFaceRenameTxtBx.IsEmpty("Renaming test not face prefix,")) return;
+        }
 
-        //            // default rename source dir
-        //            if (TrainFaceSrcDir.IsEmpty("Renaming train face source directory path,")) return;
-        //            if (TrainNotFaceSrcDir.IsEmpty("Renaming train not face source directory path,")) return;
-        //            if (TestFaceSrcDir.IsEmpty("Renaming test face source directory path,")) return;
-        //            if (TestNotFaceSrcDir.IsEmpty("Renaming test not face source directory path,")) return;
+        private void TrainFacesEndIndexNumeric_ValueChanged(object sender, EventArgs e) {
+            trainFacesEndIndex = (int)((NumericUpDown)sender).Value;
 
-        //            // default rename dest dir
-        //            if (TrainFaceDestDir.IsEmpty("Renaming train face destination directory path,")) return;
-        //            if (TrainNotFaceDestDir.IsEmpty("Renaming train not face destination directory path,")) return;
-        //            if (TestFaceDestDir.IsEmpty("Renaming test face destination directory path,")) return;
-        //            if (TestNotFaceDestDir.IsEmpty("Renaming test not face destination directory path,")) return;
+        }
+        private void TrainNonFacesStartIndexNumeric_ValueChanged(object sender, EventArgs e) {
+            trainNonFacesStartIndex = (int)((NumericUpDown)sender).Value;
 
-        //            RenameFiles(TrainFaceSrcDir.Text, TrainFaceDestDir.Text, TrainFaceRenameTxtBx.Text, "Train face file prefix");
-        //            RenameFiles(TrainNotFaceRenameTxtBx.Text, TrainNotFaceSrcDir.Text, TrainNotFaceDestDir.Text, "Train not face file prefix");
-        //            RenameFiles(TestFaceRenameTxtBx.Text, TestFaceSrcDir.Text, TestFaceDestDir.Text, "Test not face file prefix");
-        //            RenameFiles(TestNotFaceRenameTxtBx.Text, TestNotFaceSrcDir.Text, TestNotFaceDestDir.Text, "Test face file prefix");
-        //        }, token);
-        //    } catch (OperationCanceledException) {
-        //        Form1.Instance.SetCurrentStatus("Stopped!");
-        //    } finally {
-        //        cancelTokenSources.Remove(cancelTokenSource);
-        //    }
-        //}
+        }
+
+        private void TrainNonFacesEndIndexNumeric_ValueChanged(object sender, EventArgs e) {
+            trainNonFacesEndIndex = (int)((NumericUpDown)sender).Value;
+
+        }
+
+        private void TestFaceStartIndexNumeric_ValueChanged(object sender, EventArgs e) {
+            testFacesStartIndex = (int)((NumericUpDown)sender).Value;
+
+        }
+
+        private void TestFaceEndIndexNumeric_ValueChanged(object sender, EventArgs e) {
+            testFacesEndIndex = (int)((NumericUpDown)sender).Value;
+
+        }
+
+        private void TestNonFaceStartIndexNumeric_ValueChanged(object sender, EventArgs e) {
+            testNonFacesStartIndex = (int)((NumericUpDown)sender).Value;
+
+        }
+
+        private void TestNonFaceEndIndexNumeric_ValueChanged(object sender, EventArgs e) {
+            testNonFacesEndIndex = (int)((NumericUpDown)sender).Value;
+        }
         #endregion
-
-        private void livePreviewCheckBox_CheckedChanged(object sender, EventArgs e) {
-            showLivePreview = ((CheckBox)sender).Checked;
-        }
-
-        private void TrainStartIndexNumeric_ValueChanged(object sender, EventArgs e) {
-
-        }
-
-        private void TrainEndIndexNumeric_ValueChanged(object sender, EventArgs e) {
-
-        }
-
-        private void TestStartIndexNumeric_ValueChanged(object sender, EventArgs e) {
-
-        }
-
-        private void TestEndIndexNumeric_ValueChanged(object sender, EventArgs e) {
-
-        }
-
-        private void comboBox1_SelectedValueChanged(object sender, EventArgs e) {
-            OperatorNames selection;
-            Enum.TryParse<OperatorNames>(((ComboBox)sender).SelectedValue.ToString(), out selection);
-            switch (selection) {
-                case OperatorNames.Prewitt3x3x1: selectedOperator = Operators.Prewitt3x3x1; break;
-                case OperatorNames.Prewitt3x3x4: selectedOperator = Operators.Prewitt3x3x4; break;
-                case OperatorNames.Prewitt3x3x8: selectedOperator = Operators.Prewitt3x3x8; break;
-                case OperatorNames.Kirsch3x3x1: selectedOperator = Operators.Kirsch3x3x1; break;
-                case OperatorNames.Kirsch3x3x4: selectedOperator = Operators.Kirsch3x3x4; break;
-                case OperatorNames.Kirsch3x3x8: selectedOperator = Operators.Kirsch3x3x8; break;
-                case OperatorNames.Sobel3x3x1: selectedOperator = Operators.Sobel3x3x1; break;
-                case OperatorNames.Sobel3x3x4: selectedOperator = Operators.Sobel3x3x4; break;
-                case OperatorNames.Sobel3x3x8: selectedOperator = Operators.Sobel3x3x8; break;
-                case OperatorNames.Scharr3x3x1: selectedOperator = Operators.Scharr3x3x1; break;
-                case OperatorNames.Scharr3x3x4: selectedOperator = Operators.Scharr3x3x4; break;
-                case OperatorNames.Scharr3x3x8: selectedOperator = Operators.Scharr3x3x8; break;
-                case OperatorNames.Isotropic3x3x1: selectedOperator = Operators.Isotropic3x3x1; break;
-                case OperatorNames.Isotropic3x3x4: selectedOperator = Operators.Isotropic3x3x4; break;
-                case OperatorNames.Isotropic3x3x8: selectedOperator = Operators.Isotropic3x3x8; break;
-            }
-        }
     }
 }
