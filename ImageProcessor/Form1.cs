@@ -93,7 +93,7 @@ namespace ImageProcessor {
         private void SetControlDefaults() {
             // load the combobox
             OperatorComboBox.DataSource = Enum.GetValues(typeof(OperatorNames));
-            OperatorComboBox.SelectedItem = OperatorNames.Sobel3x3x1.ToString();
+            OperatorComboBox.SelectedIndex = (int)OperatorNames.Sobel3x3x1;
 
             // set high and low  for the indexed image sets
             testFacesStartIndex = 0;
