@@ -8,6 +8,15 @@ The image is downscaled by moving a 3x3 operator along the given bitmap, multipl
 ## Dataset Output
 Each transformed face is represented as a single 50 column row in the output CSV file. The 50th column specifies the class (0 non-face, 1 face).
 
+## Features
+* gui interface
+* live preview window (cool effect)
+* multiple types of math operators
+* multi-threaded
+* displays image processing rate
+* shows a realtime progress bar
+* shows the time elapsed and total processing duration
+
 ## Screenshot
 ![alt gui](screenshot.png)
 
